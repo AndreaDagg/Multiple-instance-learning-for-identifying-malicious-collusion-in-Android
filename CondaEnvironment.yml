@@ -1,0 +1,4 @@
+name: my-environment
+channels:
+  - defaults
+prefix: C:\Users\dagua\anaconda3\envs\my-environment
