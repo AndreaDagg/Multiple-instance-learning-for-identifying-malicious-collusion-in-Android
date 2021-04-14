@@ -15,12 +15,14 @@ base_path = os.getcwd()
 apk_folder = os.path.join(base_path, "apk")  # base_path/apk
 audio_folder = os.path.join(apk_folder, "audio")  # base_path/apk/audio
 
-print(base_path)
-print(apk_folder)
-print(audio_folder)
+print("basePath: ", base_path)
+print("Apk Folder: ", apk_folder)
+print("Audio Folder: ", audio_folder)
 
 '''
+@header: E' la stringa della prima riga del file csv
 @.split():  Split a string into a list where each word is a list item:
+
 '''
 # header = 'filename chroma_stft rmse spectral_centroid spectral_bandwidth rolloff zero_crossing_rate'
 header = 'filename chroma_stft spectral_centroid spectral_bandwidth rolloff zero_crossing_rate'
@@ -44,7 +46,7 @@ with file:
     writer.writerow(header)
 
 '''
-@genres:        crea una lista di die elementi "trusted" and "malware"
+@genres:        crea una lista di elementi "trusted" and "malware"
 @os.listdir:    restituisce una lista contenente i nomi delle voci nella directory data da path. L'elenco è in ordine arbitrario. Non include le voci speciali "." e '..' anche se sono presenti nella directory.
 '''
 genres = 'trusted malware'.split()
@@ -54,7 +56,21 @@ for g in genres:
         if filename == ".DS_Store":  # Se il file è .DS_Store continuo a l'terazione senza eseguire le istruzioni del ciclo
             continue
 
-        songname = f'{audio_folder}/{g}/{filename}'
+        songname = f'{audio_folder}/{g}/{filename}'  # path del file audio i-mo
+        '''
+        @librosa.load:  loading dei primo 30sec del file audio convertendo il segnale in mono
+                        Ritorna:    Y   -> la serie temporale dell'audio. Un segnale audio, indicato con y , e rappresentato come un unidimensionale numpy.ndarray di valori in virgola mobile. y [t] corrisponde all'ampiezza della forma d'onda al campione t ."
+                                    SR  -> frequenza di campionamento di Y
+                        https://medium.com/comet-ml/applyingmachinelearningtoaudioanalysis-utm-source-kdnuggets11-19-e160b069e88
+        @croma_stft:    Calcola un cromagramma da una forma d'onda o uno spettrogramma di potenza.
+        @spectral_centroid:     Calcola il centroide spettrale
+        @spectral_bandwidth:    Calcola la larghezza di banda spettrale del p-esimo ordine.
+        @spectral_rolloff:      Compute roll-off frequency.
+        @mfcc:                  Mel-frequency cepstral coefficients (MFCCs)
+        ---------------------------------------------------------------------
+        @np.mean:       Restituisce la media degli elementi dell'array.
+        
+        '''
         y, sr = librosa.load(songname, mono=True, duration=30)
         chroma_stft = librosa.feature.chroma_stft(y=y, sr=sr)
         # rmse = librosa.feature.rmse(y=y)
@@ -65,10 +81,11 @@ for g in genres:
         mfcc = librosa.feature.mfcc(y=y, sr=sr)
         to_append = f'{filename} {np.mean(chroma_stft)} {np.mean(spec_cent)} {np.mean(spec_bw)} {np.mean(rolloff)} {np.mean(zcr)}'
         # to_append = f'{filename} {np.mean(chroma_stft)} {np.mean(rmse)} {np.mean(spec_cent)} {np.mean(spec_bw)} {np.mean(rolloff)} {np.mean(zcr)}'
-        for e in mfcc:
-            to_append += f' {np.mean(e)}'
-        to_append += f' {g}'
 
-        file = open('data.csv', 'a', newline='')
-        writer = csv.writer(file)
+        for e in mfcc:
+            to_append += f' {np.mean(e)}'  # media dei valori in mfcc
+        to_append += f' {g}'  # ultima colonna label
+
+        file = open('data.csv', 'a', newline='')  # apre il file in modalità aggiunta
+        writer = csv.writer(file)  # aggiungiamo la riga al file
         writer.writerow(to_append.split())
