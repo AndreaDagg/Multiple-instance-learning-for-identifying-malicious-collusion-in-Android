@@ -69,12 +69,17 @@ def convert_file_to_wav(file_to_convert, mode="raw"):
         # print("log-->", header)
         header += struct.pack("<HH", len(data), len(data))
         data = header + data + struct.pack("<L", sum(data))
+    else:
+        print("Logdagg -> non mode level in convert file to wav function")
 
     return data
 
 
 '''
-@bits: L'array bits di esadecimali forma un'onda (non sinusoidale) dato che i valori si ripetono ma con ampiezza diverse
+@data: File convertito da file .dex in .wav   
+@path: La path i-esima dove si trova la Directory apk a cui è stata cambiata l'estensione in .wav
+---
+@bits: La matrice 2 * 32 bits di esadecimali forma un'onda (non sinusoidale) dato che i valori si ripetono ma con ampiezza diverse
 '''
 
 
@@ -149,10 +154,35 @@ def wav_to_file(data, path):
             0xE7,
         ],
     ]
+
+    import numpy as np  # TODO: Cancella
+    print(np.matrix(bits))
+    '''
+    Operatori bit per bit ^ XOR 
+    Per ogni bit nella riga della matrice bit vine emesso in XOR con 0x80 -> 128 -> 10000000
+    La matrice bit diventa una matrice di XOR
+    ----
+    
+    '''
     bits[0] = [b ^ 0x80 for b in bits[0]]
     bits[1] = [b ^ 0x80 for b in bits[1]]
+
+    print("\n", np.matrix(bits))  # TODO: Cancella
+
+    # TODO: Capire
     bits[0] = struct.pack("%sB" % len(bits[0]), *bits[0])
     bits[1] = struct.pack("%sB" % len(bits[1]), *bits[1])
+
+    print("\n", np.matrix(bits))  # TODO: Cancella
+    '''
+    @open:              Crea un file per la scrittura 'W' && 'b' binary mode quindi 'wb' indica che il file è aperto per la scrittura in modalità binaria.
+                        Nel file creato scrive il File convertito da file .dex in .wav 
+    @wave.open:         Apre il file in modalità scrittura
+    @wave.setparams:    (nchannels, sampwidth, framerate, nframes, comptype, compname)
+    @wave.writeframes:  Scrivi fotogrammi (frame) audio.
+                        >>  operations Spostamento a destra. Sposta a destra spingendo le copie del bit più a sinistra da sinistra e lasciare cadere i bit più a destra
+                        &   AND logico 
+    '''
     open("test.bin", "wb").write(data)
 
     wav_out = wave.open(path, "w")
@@ -227,8 +257,14 @@ for apk in apk_folder_files:
         # Conversione del file dex in .wav
         audio_file = convert_file_to_wav(dex_file)
 
+        '''
+        @trusted_audio: Script/apk/audio/trusted
+        @wav_name:      i-esima Directory apk a cui è stata cambiata l'estensione in .wav
+        @wav_path:      Script/apk/audio/trusted/wav_name.wav    
+        @audio_file:    Conversione del file dex in .wav   
+        '''
         # Prendo nome.apk e lo trasformo in nome.wav
-        # modifica l'estensuione andando ad aggiungere alla root [0] della path ".wav" TODO: Continue
+        # modifica l'estensuione andando ad aggiungere alla root [0] della path ".wav"
         wav_name = os.path.splitext(apk)[0] + '.wav'
         wav_path = os.path.join(trusted_audio, wav_name)
 
