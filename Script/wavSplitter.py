@@ -1,27 +1,25 @@
 '''
 wav splitter:
-Lo script da realizzare prende in input i file .wav dalla cartella (apk > audio > trusted) e suddivide il file in più
-file della durata data in input.
-
-Lo script chiede in input la durata dello split in secondi.
+Lo script chiede in input la durata dello split in secondi, la durata dev’essere maggiore di 0.
 Se non è stata creata va a creare una cartella Splitted_Wav in apk > audio > Splitted_wav  tramite una funzione “createNewDirectory”.
+
 Proseguendo va ad iterare su tutti i file .wav in apk > audio > trusted
-e per ogni .wav trovato crea una sub directory in apk > audio > Splitted_wav che prende il nome del file .wav da splittare e va poi a popolarla dei file splittati.
+e, per ogni .wav trovato, crea una sub directory in apk > audio > Splitted_wav che prende il nome del file .wav da splittare e va poi a popolarla con i file splittati.
 Ho pensato di fare in questo modo così ogni file .wav avrà una sua cartella che conterrà gli split.
-Lo split l’ho fatto in una funzione “splittingWav” che va a calcolare il numero degli split in cui suddividere il file audio originale e poi itera sugli intervalli e crea la suddivisione sempre però partendo dal file originale.
-Ho usato però una libreria per fare lo split che si chiama “pydub”.
+
+Lo split avviene in una funzione “splittingWav” che va a calcolare il numero degli split in cui suddividere il file audio originale e poi itera sugli intervalli e crea la suddivisione sempre partendo dal file originale.
+Il nome dei file splittati corrisponde all’intervallo dell’i-esimo split (in millisecondi).
+Quindi ogni split inizia nello stesso punto dove termina il precedente.
+
 ------------------------------------ LIBRERIE -------------------------------------------
--   pip install pydub
--   scaricare ffmpeg https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z
-    Estrarlo in una directory e aggiungere le path alle variabili di ambiente windows
+-   pip install pydub (https://github.com/jiaaro/pydub#installation)
+-   scaricare ffmpeg (https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z)
+    Estrarlo in una directory e aggiungere le path alle variabili di ambiente windows (https://github.com/jiaaro/pydub/issues/348)
     pip install ffmpeg
 '''
 import os
 from pydub import AudioSegment
 
-# https://github.com/jiaaro/pydub#installation
-# ffmpeg https://www.gyan.dev/ffmpeg/builds/
-# Come aggiungere ffmpeg https://github.com/jiaaro/pydub/issues/348
 '''
 createNewDirectory 
 La funzione prende in input una path ed un a stringa e crea una nuova cartella 
