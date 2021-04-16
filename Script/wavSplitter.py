@@ -3,6 +3,13 @@ wav splitter:
 Lo script da realizzare prende in input i file .wav dalla cartella (apk > audio > trusted) e suddivide il file in più
 file della durata data in input.
 
+Lo script chiede in input la durata dello split in secondi.
+Se non è stata creata va a creare una cartella Splitted_Wav in apk > audio > Splitted_wav  tramite una funzione “createNewDirectory”.
+Proseguendo va ad iterare su tutti i file .wav in apk > audio > trusted
+e per ogni .wav trovato crea una sub directory in apk > audio > Splitted_wav che prende il nome del file .wav da splittare e va poi a popolarla dei file splittati.
+Ho pensato di fare in questo modo così ogni file .wav avrà una sua cartella che conterrà gli split.
+Lo split l’ho fatto in una funzione “splittingWav” che va a calcolare il numero degli split in cui suddividere il file audio originale e poi itera sugli intervalli e crea la suddivisione sempre però partendo dal file originale.
+Ho usato però una libreria per fare lo split che si chiama “pydub”.
 ------------------------------------ LIBRERIE -------------------------------------------
 -   pip install pydub
 -   scaricare ffmpeg https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z
