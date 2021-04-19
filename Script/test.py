@@ -248,7 +248,7 @@ for apk in os.listdir(trusted_apk):
         else:
             apk_folder_files.append(apk)
 
-print("\nApk_Folder_Files-> ", apk_folder_files)
+print("\nApk_Folder_Files-> ", apk_folder_files, "\nLength: ", len(apk_folder_files))
 
 '''
 @zipfile.ZipFile:   prende in input la path dell'i-esimo apk della cartella e mode = "r" 
@@ -260,8 +260,10 @@ print("\nApk_Folder_Files-> ", apk_folder_files)
                     /home/User/Desktop/file.txt (path)    /home/User/Desktop/file  (root)            .txt (ext)
                     Restiruisce una coppia [0] la root [1] l'estensione
 '''
+iteration = 1
 for apk in apk_folder_files:
-    print("\nCurrent apk: ", apk)
+    print("\nCurrent apk: ", apk, "\nIter: ", iteration)
+    iteration += 1  # LOG iterazione per tenere traccia dell'apk
     apk_path = os.path.join(trusted_apk, apk)  # path dell'apk i-esimo
     # print("Apk Path: ", apk_path)
     archive = zipfile.ZipFile(apk_path, "r")  # Quidni archive va a leggere(decomprimere) il file .apk i-esimo
