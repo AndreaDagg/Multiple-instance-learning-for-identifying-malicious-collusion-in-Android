@@ -36,4 +36,7 @@ for wav in os.listdir(trusted_audio):
             '''
 
     # print("\nApk_Folder_Files-> ", apk_folder_files, "\nLength: ", len(apk_folder_files))
-    print(str(wav), end=",")
+    '''
+    per avre la lista dei nomi senza doverli copiare uino ad uno
+    '''
+    #print(str(wav), end=",")

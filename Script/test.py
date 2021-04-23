@@ -7,6 +7,13 @@ import struct
 # Legge i file .apk presenti in /Users/nicola/Desktop/tesi/apk e
 # li converte in file .wav nella cartella /Users/nicola/Desktop/tesi/apk/audio
 
+
+'''
+if true significa che stiamo convertendo gli apk del dataset Trusted
+If false significa che stiamo convertendo gi apk del dataset ACID
+'''
+DatasetTypeTrusted = True
+
 '''
 @convert_flie_to_wav:   Prende in input un file da convertire e ritorna un file di tipo (...) 
                         Il parametro mode è impostato a raw di default, se non esplicitato nel richiamo della funzione resterà come di default 
@@ -214,8 +221,10 @@ print("\n------------------------- START LogDag-----------------------", "\nLogD
 '''
 
 audio_folder = os.path.join(apk_folder, "audio")
-trusted_audio = os.path.join(audio_folder, "trusted")
+trusted_audio = os.path.join(audio_folder, "trusted")  # cartella di destinazione dei file .apk dataset acid
 malware_audio = os.path.join(audio_folder, "malware")
+trusted_audio_trusted_apk = os.path.join(audio_folder,
+                                         "trusted_audio_trusted_apk")  # cartella di destinazione dei file .apk trusted
 
 # Crea la cartella audio_folder se non esiste nella (...)
 if not os.path.exists(audio_folder):
@@ -233,10 +242,16 @@ Itera sui file presenti nella cartella trustes_apk e se un file all'iterata (apk
 
 Aggiunta codice per controllare se l'apk è gia stato convertito, in modo che vengano aggiunti alla lista @apk_folder_files solo i file da convertire nuovi
 '''
+
+if(DatasetTypeTrusted):
+    destinationFolderWav = trusted_audio_trusted_apk
+else:
+    destinationFolderWav = trusted_audio
+
 for apk in os.listdir(trusted_apk):
     Continue = False
     if ((apk.endswith(".apk"))):
-        for wav in os.listdir(trusted_audio):
+        for wav in os.listdir(destinationFolderWav):
             # print("LogDagg-> Trusted audio: ", trusted_audio)
             wav_name = os.path.splitext(apk)[0] + '.wav'
             if (wav_name == wav):
@@ -282,7 +297,14 @@ for apk in apk_folder_files:
         # Prendo nome.apk e lo trasformo in nome.wav
         # modifica l'estensuione andando ad aggiungere alla root [0] della path ".wav"
         wav_name = os.path.splitext(apk)[0] + '.wav'
-        wav_path = os.path.join(trusted_audio, wav_name)
+        '''
+        Il primo se elaboriamo gli apk del dataset acid
+        Il secodno de elaboriamo gli apk del dataset trusted
+        '''
+        # wav_path = os.path.join(trusted_audio, wav_name)
+       # wav_path = os.path.join(trusted_audio_trusted_apk, wav_name)
+
+        wav_path = os.path.join(destinationFolderWav, wav_name)
 
         # Salvo nome.wav nella cartella /apk/audio
         wav_to_file(audio_file, wav_path)
