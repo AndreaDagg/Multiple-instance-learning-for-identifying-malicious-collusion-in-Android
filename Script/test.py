@@ -69,8 +69,8 @@ def convert_file_to_wav(file_to_convert, mode="raw"):
         # print("log-->", header)
         header += struct.pack("<HH", len(data), len(data))
         data = header + data + struct.pack("<L", sum(data))
-    else:
-        print("Logdagg -> non mode level in convert file to wav function")
+    # else:
+    # print("Logdagg -> non mode level in convert file to wav function") #TODO Cancella
 
     return data
 
@@ -155,8 +155,8 @@ def wav_to_file(data, path):
         ],
     ]
 
-    import numpy as np  # TODO: Cancella
-    print(np.matrix(bits))
+    # import numpy as np  # TODO: Cancella
+    # print(np.matrix(bits))
     '''
     Operatori bit per bit ^ XOR 
     Per ogni bit nella riga della matrice bit vine emesso in XOR con 0x80 -> 128 -> 10000000
@@ -167,13 +167,13 @@ def wav_to_file(data, path):
     bits[0] = [b ^ 0x80 for b in bits[0]]
     bits[1] = [b ^ 0x80 for b in bits[1]]
 
-    print("\n", np.matrix(bits))  # TODO: Cancella
+    #  print("\n", np.matrix(bits))  # TODO: Cancella
 
     # TODO: Capire
     bits[0] = struct.pack("%sB" % len(bits[0]), *bits[0])
     bits[1] = struct.pack("%sB" % len(bits[1]), *bits[1])
 
-    print("\n", np.matrix(bits))  # TODO: Cancella
+    # print("\n", np.matrix(bits))  # TODO: Cancella
     '''
     @open:              Crea un file per la scrittura 'W' && 'b' binary mode quindi 'wb' indica che il file è aperto per la scrittura in modalità binaria.
                         Nel file creato scrive il File convertito da file .dex in .wav 
@@ -230,11 +230,25 @@ apk_folder_files = list()  # inizializza una lista/array
 '''
 Itera sui file presenti nella cartella trustes_apk e se un file all'iterata (apk-esima) termina con .apk lo aggiunge alla directory apk_folder_files 
 @os.listdir:    restituisce una lista contenente i nomi delle voci nella directory data da path. L'elenco è in ordine arbitrario. Non include le voci speciali "." e '..' anche se sono presenti nella directory.
+
+Aggiunta codice per controllare se l'apk è gia stato convertito, in modo che vengano aggiunti alla lista @apk_folder_files solo i file da convertire nuovi
 '''
 for apk in os.listdir(trusted_apk):
-    if apk.endswith(".apk"):
-        apk_folder_files.append(apk)
-print("Apk_Folder_Files-> ", apk_folder_files)
+    Continue = False
+    if ((apk.endswith(".apk"))):
+        for wav in os.listdir(trusted_audio):
+            # print("LogDagg-> Trusted audio: ", trusted_audio)
+            wav_name = os.path.splitext(apk)[0] + '.wav'
+            if (wav_name == wav):
+                print("LogDagg-> wawModify: ", wav_name, " = ", wav)
+                Continue = True
+                break
+        if (Continue == True):
+            continue
+        else:
+            apk_folder_files.append(apk)
+
+print("\nApk_Folder_Files-> ", apk_folder_files, "\nLength: ", len(apk_folder_files))
 
 '''
 @zipfile.ZipFile:   prende in input la path dell'i-esimo apk della cartella e mode = "r" 
@@ -246,10 +260,12 @@ print("Apk_Folder_Files-> ", apk_folder_files)
                     /home/User/Desktop/file.txt (path)    /home/User/Desktop/file  (root)            .txt (ext)
                     Restiruisce una coppia [0] la root [1] l'estensione
 '''
+iteration = 1
 for apk in apk_folder_files:
-    print("Current apk: ", apk)
+    print("\nCurrent apk: ", apk, "\nIter: ", iteration)
+    iteration += 1  # LOG iterazione per tenere traccia dell'apk
     apk_path = os.path.join(trusted_apk, apk)  # path dell'apk i-esimo
-    print("Apk Path: ", apk_path)
+    # print("Apk Path: ", apk_path)
     archive = zipfile.ZipFile(apk_path, "r")  # Quidni archive va a leggere(decomprimere) il file .apk i-esimo
     try:
         dex_file = archive.read("classes.dex")  # Legge il file classes.dex presente nell'archvio .apk
