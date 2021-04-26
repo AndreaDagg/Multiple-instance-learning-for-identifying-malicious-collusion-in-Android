@@ -22,6 +22,12 @@ import os
 from pydub import AudioSegment
 
 '''
+if true significa che stiamo convertendo gli apk del dataset Trusted
+If false significa che stiamo convertendo gi apk del dataset ACID
+'''
+DatasetTypeTrusted = False
+
+'''
 createNewDirectory 
 La funzione prende in input una path ed un a stringa e crea una nuova cartella 
     @return La funzione ritorna la path della cartella creata 
@@ -99,27 +105,39 @@ while ((type(splittingduration) != float) or (splittingduration <= 0)):
     except ValueError:
         print("The input data is not a number")
 '''
-'''
-@trusted_audio Se dobbiamo splittare i file trusted commentare la prima variabile altrimenti la seconda
-'''
+
 # file .wav path directory
 base_path = os.getcwd()
 apk_folder = os.path.join(base_path, "apk")
 audio_folder = os.path.join(apk_folder, "audio")
-trusted_audio = os.path.join(audio_folder, "trusted")
-# trusted_audio = os.path.join(audio_folder, "trusted_audio_trusted_apk")
 
-print("Log  -> trusted_audio", trusted_audio, "\n")
 
 createNewDirectory(audio_folder, "Splitted_Wav")
 SplittedDirectory = os.path.join(audio_folder, "Splitted_Wav")  # path alla dierctory dei file splitted
+createNewDirectory(SplittedDirectory, "Acid_Splitted")
+createNewDirectory(SplittedDirectory, "Trusted_Splitted")
+Acid_Splitted_Directory = os.path.join(SplittedDirectory, "Acid_Splitted")
+Trusted_Splitted_Directory = os.path.join(SplittedDirectory, "Trusted_Splitted")
+'''
+@trusted_audio  Se dobbiamo splittare i file trusted si imposta la variabile globale
+                @DatasetTypeTrusted a TRUE altrimenti a FALSE e si assegna la path alla cartella 
+'''
+if (DatasetTypeTrusted):  # controllo sul dataset in elaborazione
+    trusted_audio = os.path.join(audio_folder, "trusted_audio_trusted_apk")
+    Path_SubDirectory = Trusted_Splitted_Directory
+else:
+    trusted_audio = os.path.join(audio_folder, "trusted")  # dataset acid
+    Path_SubDirectory = Acid_Splitted_Directory
+
+
+print("Log  -> trusted_audio", trusted_audio, "\n")
 
 # Itera su tutti i file .wav nella cartella trusted_audio
 for wav_file in os.listdir(trusted_audio):
     if wav_file.endswith(".wav"):
         print("wav_Files-> ", wav_file)
         # creo la sottocartella dove inserirò il file audio suddiviso
-        wavSplittedDirectory = createNewDirectory(SplittedDirectory, str(wav_file))
+        wavSplittedDirectory = createNewDirectory(Path_SubDirectory, str(wav_file))
         print("LOG-> ", wavSplittedDirectory)
         pathToOriginalWav = trusted_audio + "\\" + str(wav_file)  # path to original file .wav
         splittingWav(pathToOriginalWav, wavSplittedDirectory)
