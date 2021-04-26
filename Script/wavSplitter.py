@@ -17,6 +17,7 @@ Quindi ogni split inizia nello stesso punto dove termina il precedente.
     Estrarlo in una directory e aggiungere le path alle variabili di ambiente windows (https://github.com/jiaaro/pydub/issues/348)
     pip install ffmpeg
 '''
+import math
 import os
 from pydub import AudioSegment
 
@@ -61,27 +62,33 @@ def splittingWav(pathToOriginalWav, pathToSplittedWav):
         originalAudio.duration_seconds, " Minutes: ",
         (originalAudio.duration_seconds / 60), " Hours: ", ((originalAudio.duration_seconds / 60) / 60), "\n\n")
 
-    # divisione per eccesso (estremo superiore)
-    numberOfSplit = round(originalAudio.duration_seconds / splittingduration)
+    # @math.ceil divisione per eccesso (estremo superiore) non va bene ROUND perche 0.1 è un iterata non zero
+    # numberOfSplit = round(originalAudio.duration_seconds / splittingduration)
+
+    numberOfSplitNotRound = originalAudio.duration_seconds / splittingduration
+    numberOfSplit = math.ceil(originalAudio.duration_seconds / splittingduration)
+
     # numberOfSplit = 10
 
-    print("LOG-> Number of split: ", numberOfSplit)
+    print("LOG-> Number of split: ", numberOfSplit, "Numb.Of.Split.Not.Round: ", numberOfSplitNotRound)
 
     t_start = 0
     for i in range(numberOfSplit):
         t_stop = (t_start + (splittingduration * 1000))  # Works in milliseconds
-        print(F"Passo {i} \n t_start {t_start}, t_stop {t_stop}")
+
         splittedAudio = originalAudio[t_start:t_stop]
         splittedAudio.export(out_f=pathToSplittedWav + "\\" + str(t_start) + " - " + str(t_stop) + '.wav',
                              format="wav")  # Exports
         t_start = t_stop
+    # print(            F"Passo {i} \n t_start {t_start}, t_stop {t_stop}, duration {splittedAudio.duration_seconds / 60} ")
 
 
 '''
 - Get positive split duration
 @splittingsuration:     Variabile globale data in input, rappresenta la durata dei file splittati
 '''
-splittingduration = 0
+splittingduration = 2093
+'''
 while ((type(splittingduration) != float) or (splittingduration <= 0)):
     splittingduration = input("Splittingduration (Seconds): ")
     try:
@@ -91,12 +98,16 @@ while ((type(splittingduration) != float) or (splittingduration <= 0)):
             print("The duration of the split cannot be zero or less than zero")
     except ValueError:
         print("The input data is not a number")
-
+'''
+'''
+@trusted_audio Se dobbiamo splittare i file trusted commentare la prima variabile altrimenti la seconda
+'''
 # file .wav path directory
 base_path = os.getcwd()
 apk_folder = os.path.join(base_path, "apk")
 audio_folder = os.path.join(apk_folder, "audio")
 trusted_audio = os.path.join(audio_folder, "trusted")
+# trusted_audio = os.path.join(audio_folder, "trusted_audio_trusted_apk")
 
 print("Log  -> trusted_audio", trusted_audio, "\n")
 
