@@ -45,6 +45,8 @@ with file:
     writer = csv.writer(file)
     writer.writerow(header)
 
+fileArff = open('data.arff', 'a', newline='')
+fileArff.close()
 '''
 @genres:        crea una lista di elementi "trusted" and "malware"
 @os.listdir:    restituisce una lista contenente i nomi delle voci nella directory data da path. L'elenco è in ordine arbitrario. Non include le voci speciali "." e '..' anche se sono presenti nella directory.
@@ -120,13 +122,25 @@ for trustedOrAcidDirectory in genres:
                 zcr = librosa.feature.zero_crossing_rate(y)
                 mfcc = librosa.feature.mfcc(y=y, sr=sr)
                 to_append = f'{audioTitle} {np.mean(chroma_stft)} {np.mean(spec_cent)} {np.mean(spec_bw)} {np.mean(rolloff)} {np.mean(zcr)}'
+                to_append_arff = f'{audioTitle} {","}\"{np.mean(chroma_stft)}{","} {np.mean(spec_cent)}{","} {np.mean(spec_bw)} {","}{np.mean(rolloff)} {","}{np.mean(zcr)}{","}'
 
+                iterIndex = 1
                 for e in mfcc:
+                    if (iterIndex == len(mfcc)):
+                        to_append_arff += f' {np.mean(e)}\"{","}'  # media dei valori in mfcc
+                    else:
+                        to_append_arff += f' {np.mean(e)}{","}'  # media dei valori in mfcc
                     to_append += f' {np.mean(e)}'  # media dei valori in mfcc
+                    iterIndex += 1
 
-                # Attributo label
+                    # Attributo label
                 to_append += f' {classe}'  # ultima colonna label
+                to_append_arff += f' {classe}{","}'  # ultima colonna label
 
                 file = open('data.csv', 'a', newline='')  # apre il file in modalità aggiunta
                 writer = csv.writer(file)  # aggiungiamo la riga al file
                 writer.writerow(to_append.split())
+
+                fileArff = open('data.arff', 'a', newline='')
+                fileArff.writelines(to_append_arff)
+                fileArff.close()

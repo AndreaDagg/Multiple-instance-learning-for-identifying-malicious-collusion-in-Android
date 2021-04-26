@@ -39,4 +39,4 @@ for wav in os.listdir(trusted_audio):
     '''
     per avre la lista dei nomi senza doverli copiare uino ad uno
     '''
-    #print(str(wav), end=",")
+    print(str(wav.split(".")[0]), end=",") #TODO: levare lo split perché ci sono i trusted con il punto aggiornare il wavextract
