@@ -14,6 +14,7 @@ import librosa.display
 base_path = os.getcwd()
 apk_folder = os.path.join(base_path, "apk")  # base_path/apk
 audio_folder = os.path.join(apk_folder, "audio")  # base_path/apk/audio
+trusted_Acid_Folder = os.path.join(apk_folder, "trusted_Acid")
 
 print("basePath: ", base_path)
 print("Apk Folder: ", apk_folder)
@@ -29,7 +30,7 @@ header = 'filename chroma_stft spectral_centroid spectral_bandwidth rolloff zero
 
 for i in range(1, 21):
     header += f' mfcc{i}'
-header += ' label'
+header += ' class'
 header = header.split()
 
 '''
@@ -45,7 +46,25 @@ with file:
     writer = csv.writer(file)
     writer.writerow(header)
 
+
+
+
 fileArff = open('data.arff', 'a', newline='')
+fileArff.write("@relation virus\n\n")
+fileArff.write("@attribute virus_bag{")
+
+for wav in os.listdir(trusted_Acid_Folder):
+    fileArff.write(f'{str(wav.split(".")[0])}{","}')
+fileArff.write("}\n")
+fileArff.write("@attribute bag relational\n")
+
+for label in header:
+    if (label == "class" or label == "filename"):
+        continue
+    fileArff.write(f'{"@attribute"} {label} {"numeric"}\n')
+fileArff.write("@end bag\n")
+fileArff.write("@attribute class{trusted,broadcast_intent,shared_preferences,external_storage}\n\n")
+fileArff.write("@data\n")
 fileArff.close()
 '''
 @genres:        crea una lista di elementi "trusted" and "malware"
@@ -122,20 +141,20 @@ for trustedOrAcidDirectory in genres:
                 zcr = librosa.feature.zero_crossing_rate(y)
                 mfcc = librosa.feature.mfcc(y=y, sr=sr)
                 to_append = f'{audioTitle} {np.mean(chroma_stft)} {np.mean(spec_cent)} {np.mean(spec_bw)} {np.mean(rolloff)} {np.mean(zcr)}'
-                to_append_arff = f'{audioTitle} {","}\"{np.mean(chroma_stft)}{","} {np.mean(spec_cent)}{","} {np.mean(spec_bw)} {","}{np.mean(rolloff)} {","}{np.mean(zcr)}{","}'
+                to_append_arff = f'{audioTitle}{","}\"{np.mean(chroma_stft)}{","}{np.mean(spec_cent)}{","}{np.mean(spec_bw)}{","}{np.mean(rolloff)}{","}{np.mean(zcr)}{","}'
 
                 iterIndex = 1
                 for e in mfcc:
                     if (iterIndex == len(mfcc)):
-                        to_append_arff += f' {np.mean(e)}\"{","}'  # media dei valori in mfcc
+                        to_append_arff += f'{np.mean(e)}\"{","}'  # media dei valori in mfcc
                     else:
-                        to_append_arff += f' {np.mean(e)}{","}'  # media dei valori in mfcc
+                        to_append_arff += f'{np.mean(e)}{","}'  # media dei valori in mfcc
                     to_append += f' {np.mean(e)}'  # media dei valori in mfcc
                     iterIndex += 1
 
                     # Attributo label
                 to_append += f' {classe}'  # ultima colonna label
-                to_append_arff += f' {classe}{","}'  # ultima colonna label
+                to_append_arff += f'{classe}\n'  # ultima colonna label
 
                 file = open('data.csv', 'a', newline='')  # apre il file in modalità aggiunta
                 writer = csv.writer(file)  # aggiungiamo la riga al file
