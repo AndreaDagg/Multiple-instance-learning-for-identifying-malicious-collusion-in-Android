@@ -94,6 +94,7 @@ for trustedOrAcidDirectory in genres:
                             apkInt += 1
 
             for splittedAudio in os.listdir(pathSplittedAudioDirectory):
+                splittedAudioPath = os.path.join(pathSplittedAudioDirectory, f'{splittedAudio}')
 
                 '''
                 @librosa.load:  loading dei primo 30sec del file audio convertendo il segnale in mono
@@ -109,8 +110,8 @@ for trustedOrAcidDirectory in genres:
                 @np.mean:       Restituisce la media degli elementi dell'array.
                 
                 '''
-                
-                y, sr = librosa.load(splittedAudio, mono=True, duration=30)
+
+                y, sr = librosa.load(splittedAudioPath, mono=True, duration=30)
                 chroma_stft = librosa.feature.chroma_stft(y=y, sr=sr)
                 # rmse = librosa.feature.rmse(y=y)
                 spec_cent = librosa.feature.spectral_centroid(y=y, sr=sr)
