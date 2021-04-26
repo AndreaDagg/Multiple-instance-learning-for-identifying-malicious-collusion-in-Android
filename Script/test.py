@@ -237,13 +237,15 @@ else:
 print("Apk_Folder path-> ", apk_folder)
 apk_folder_files = list()  # inizializza una lista/array
 '''
+Contollo If se stiamo convertendo gli apk del dataset acid oppure trusted
+
 Itera sui file presenti nella cartella trustes_apk e se un file all'iterata (apk-esima) termina con .apk lo aggiunge alla directory apk_folder_files 
 @os.listdir:    restituisce una lista contenente i nomi delle voci nella directory data da path. L'elenco è in ordine arbitrario. Non include le voci speciali "." e '..' anche se sono presenti nella directory.
 
 Aggiunta codice per controllare se l'apk è gia stato convertito, in modo che vengano aggiunti alla lista @apk_folder_files solo i file da convertire nuovi
 '''
 
-if(DatasetTypeTrusted):
+if (DatasetTypeTrusted):
     destinationFolderWav = trusted_audio_trusted_apk
 else:
     destinationFolderWav = trusted_audio
@@ -263,7 +265,8 @@ for apk in os.listdir(trusted_apk):
         else:
             apk_folder_files.append(apk)
 
-print("\nApk_Folder_Files-> ", apk_folder_files, "\nLength: ", len(apk_folder_files))
+print("\nApk_Folder_Files-> ", apk_folder_files, "\nLength: ", len(apk_folder_files)) 
+print("\n DATASET TRUSTED: ", DatasetTypeTrusted)
 
 '''
 @zipfile.ZipFile:   prende in input la path dell'i-esimo apk della cartella e mode = "r" 
@@ -300,9 +303,10 @@ for apk in apk_folder_files:
         '''
         Il primo se elaboriamo gli apk del dataset acid
         Il secodno de elaboriamo gli apk del dataset trusted
+        il terzo wav_path gestisce in automatico con una variabile globale definita precendentemente
         '''
         # wav_path = os.path.join(trusted_audio, wav_name)
-       # wav_path = os.path.join(trusted_audio_trusted_apk, wav_name)
+        # wav_path = os.path.join(trusted_audio_trusted_apk, wav_name)
 
         wav_path = os.path.join(destinationFolderWav, wav_name)
 
