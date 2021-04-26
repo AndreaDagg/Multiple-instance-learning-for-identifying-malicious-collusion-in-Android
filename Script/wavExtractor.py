@@ -15,6 +15,7 @@ base_path = os.getcwd()
 apk_folder = os.path.join(base_path, "apk")  # base_path/apk
 audio_folder = os.path.join(apk_folder, "audio")  # base_path/apk/audio
 trusted_Acid_Folder = os.path.join(apk_folder, "trusted_Acid")
+trusted_Apk_Folder = os.path.join(audio_folder, "trusted_audio_trusted_apk")
 
 print("basePath: ", base_path)
 print("Apk Folder: ", apk_folder)
@@ -46,15 +47,14 @@ with file:
     writer = csv.writer(file)
     writer.writerow(header)
 
-
-
-
 fileArff = open('data.arff', 'a', newline='')
 fileArff.write("@relation virus\n\n")
 fileArff.write("@attribute virus_bag{")
 
 for wav in os.listdir(trusted_Acid_Folder):
-    fileArff.write(f'{str(wav.split(".")[0])}{","}')
+    fileArff.write(f'{str(wav.split(".")[0])}{".wav"}{","}')
+for wav in os.listdir(trusted_Apk_Folder):
+    fileArff.write(f'{str(wav)}{","}')
 fileArff.write("}\n")
 fileArff.write("@attribute bag relational\n")
 
@@ -140,8 +140,8 @@ for trustedOrAcidDirectory in genres:
                 rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr)
                 zcr = librosa.feature.zero_crossing_rate(y)
                 mfcc = librosa.feature.mfcc(y=y, sr=sr)
-                to_append = f'{audioTitle} {np.mean(chroma_stft)} {np.mean(spec_cent)} {np.mean(spec_bw)} {np.mean(rolloff)} {np.mean(zcr)}'
-                to_append_arff = f'{audioTitle}{","}\"{np.mean(chroma_stft)}{","}{np.mean(spec_cent)}{","}{np.mean(spec_bw)}{","}{np.mean(rolloff)}{","}{np.mean(zcr)}{","}'
+                to_append = f'{audioTitle}{".wav"} {np.mean(chroma_stft)} {np.mean(spec_cent)} {np.mean(spec_bw)} {np.mean(rolloff)} {np.mean(zcr)}'
+                to_append_arff = f'{audioTitle}{".wav"}{","}\"{np.mean(chroma_stft)}{","}{np.mean(spec_cent)}{","}{np.mean(spec_bw)}{","}{np.mean(rolloff)}{","}{np.mean(zcr)}{","}'
 
                 iterIndex = 1
                 for e in mfcc:
