@@ -73,13 +73,16 @@ fileArff.close()
 splitted_Folder = os.path.join(audio_folder, "Splitted_Wav")
 acidDatasetFolder = os.path.join(base_path,
                                  "Dataset_Acid\\Dataset_Acid\\archive")  # path al set originale non al file audio
-genres = 'Acid_Splitted Trusted_Splitted'.split()
+genres = 'Acid_Splitted/Trusted_Splitted'.split("/")
 
 print("\nAcidFolder: ", acidDatasetFolder)
 
 numOfConfront = 0
 i = 1
 for trustedOrAcidDirectory in genres:
+
+
+
     for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDirectory}"):
         # Per ogni file all'interno della path definita sopra audio_folder/trusted ed audio_folder/malware
         if filename_SplittedFolder == ".DS_Store":  # Se il file è .DS_Store continuo a l'iterazione senza eseguire le istruzioni del ciclo
@@ -88,11 +91,12 @@ for trustedOrAcidDirectory in genres:
             classe = "trusted"
             pathSplittedAudioDirectory = f'{splitted_Folder}\\{trustedOrAcidDirectory}\\{filename_SplittedFolder}'  # path del file audio i-mo
             # Titolo corrisponde al nome della cartella i-ma senza .wav
-            audioTitle = filename_SplittedFolder.split(".")[0]
+            audioTitle = filename_SplittedFolder.split(".wav")[0]
+            print("\nLog-> File: ", audioTitle)
 
             if (trustedOrAcidDirectory == "Acid_Splitted"):
                 # songTitle = songname.split("\\")[6].split(".")[0]  # Titolo senza Path ed Estensione del file
-                print("\nLog-> File: ", audioTitle)
+
 
                 # cerca il tipo di malware
                 for setFold in os.listdir(acidDatasetFolder):
