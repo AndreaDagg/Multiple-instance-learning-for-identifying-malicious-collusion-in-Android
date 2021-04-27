@@ -78,7 +78,7 @@ fileArff.write("@attribute bag relational\n")
 for label in header:
     if (label == "class" or label == "filename"):  # salto le label class e label
         continue
-    fileArff.write(f'{"@attribute"} {label} {"numeric"}\n')
+    fileArff.write(f'{"@attribute"} {label} {"real"}\n')
 fileArff.write("@end bag\n")
 fileArff.write("@attribute class{trusted,broadcast_intent,shared_preferences,external_storage}\n\n")
 fileArff.write("@data\n")
@@ -103,8 +103,8 @@ Blocco per eseguire lo script in più running - evitare alte temperature prolung
 @genres la variabile che prende il nome della cartella che si sta analizzando (Trusted or Acid)
 Decommentare la corrispondente dell'elaborazione per far funzionare lo script correttamente
 '''
-genres = "Trusted_Splitted"
-# genres = "Acid_Splitted"
+# genres = "Trusted_Splitted"
+genres = "Acid_Splitted"
 
 i = 1
 trustedOrAcidDirectory = genres
@@ -140,10 +140,11 @@ for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDir
                             with open(f'{acidDatasetFolder}\\{setFold}\\{"description.txt"}', 'r') as reader:
                                 # estrggo dalla stringa il tipo di malware
                                 malwareType = reader.read().split(":")[1]
-                                print("Malware Type: ", malwareType)
+                                #print("Malware Type: ", malwareType)
                                 classe = malwareType
                         apkInt += 1
-
+        to_append_arff = ""
+        iterationNumb = 1
         for splittedAudio in os.listdir(pathSplittedAudioDirectory):
             # path completa al file da analizzare
             splittedAudioPath = os.path.join(pathSplittedAudioDirectory, f'{splittedAudio}')
@@ -172,12 +173,20 @@ for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDir
             zcr = librosa.feature.zero_crossing_rate(y)
             mfcc = librosa.feature.mfcc(y=y, sr=sr)
             to_append = f'{audioTitle}{".wav"} {np.mean(chroma_stft)} {np.mean(spec_cent)} {np.mean(spec_bw)} {np.mean(rolloff)} {np.mean(zcr)}'
-            to_append_arff = f'{audioTitle}{".wav"}{","}\"{np.mean(chroma_stft)}{","}{np.mean(spec_cent)}{","}{np.mean(spec_bw)}{","}{np.mean(rolloff)}{","}{np.mean(zcr)}{","}'
+            # if     è il primo elemento della bag devo precedere alla virgolette il nome id della bag
+            # else   devo iniziare con \n per differenziare le istanze delle bag e non va più audio_title ma direttamente le features
+            if (iterationNumb == 1):
+                #print("\nPrimo")
+                iterationNumb += 1
+                to_append_arff = f'{audioTitle}{".wav"}{","}\"{np.mean(chroma_stft)}{","}{np.mean(spec_cent)}{","}{np.mean(spec_bw)}{","}{np.mean(rolloff)}{","}{np.mean(zcr)}{","}'
+            else:
+                #print("\nelse Log")
+                to_append_arff += f'\\n{np.mean(chroma_stft)}{","}{np.mean(spec_cent)}{","}{np.mean(spec_bw)}{","}{np.mean(rolloff)}{","}{np.mean(zcr)}{","}'
 
             iterIndex = 1
             for e in mfcc:
-                if (iterIndex == len(mfcc)):
-                    to_append_arff += f'{np.mean(e)}\"{","}'  # media dei valori in mfcc
+                if (iterIndex == len(mfcc)):  # all'ultima features dell'istnza non mi serve inserire la virgola
+                    to_append_arff += f'{np.mean(e)}'  # media dei valori in mfcc
                 else:
                     to_append_arff += f'{np.mean(e)}{","}'  # media dei valori in mfcc
                 to_append += f' {np.mean(e)}'  # media dei valori in mfcc
@@ -185,13 +194,15 @@ for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDir
 
                 # Attributo label
             to_append += f' {classe}'  # ultima colonna label
-            to_append_arff += f'{classe}\n'  # ultima colonna label
+            # to_append_arff += f'{classe}\n'  # ultima colonna label
 
             file = open('data.csv', 'a', newline='')  # apre il file in modalità aggiunta
             writer = csv.writer(file)  # aggiungiamo la riga al file
             writer.writerow(to_append.split())
 
-            # scrivo la riga .arff
-            fileArff = open('data.arff', 'a', newline='')
-            fileArff.writelines(to_append_arff)
-            fileArff.close()
+        iterationNumb = 0
+        to_append_arff += f'\"{","}{classe}\n'  # ultima colonna label
+        # scrivo la riga .arff
+        fileArff = open('data.arff', 'a', newline='')
+        fileArff.writelines(to_append_arff)
+        fileArff.close()

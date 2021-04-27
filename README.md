@@ -21,5 +21,11 @@
 <li><strong>Task 2</strong></li>
     <ol>
         <li>wavSplitter.py file</li>
+        <li>waxExtractor.py file per estrarre le risorse dagli splitted</li>
+        <li>foundDeletedApk file </li>
+    </ol>
+    <ol>
+        <li>Weka Folder data.csv data.arff</li>
+        <li>Script > apk > audio > Splitted_wav Folder per gli audio aplittati</li>
     </ol>
 </ol>
