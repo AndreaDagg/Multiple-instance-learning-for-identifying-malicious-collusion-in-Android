@@ -19,7 +19,7 @@ malware_audio = os.path.join(audio_folder, "malware")
 
 apk_folder_files = list()
 for wav in os.listdir(trusted_audio):
-    '''
+
     Continue = False
     if ((wav.endswith(".wav"))):
         for apk in os.listdir(trusted_apk):
@@ -33,10 +33,10 @@ for wav in os.listdir(trusted_audio):
             continue
         else:
             apk_folder_files.append(wav)
-            '''
+
 
     # print("\nApk_Folder_Files-> ", apk_folder_files, "\nLength: ", len(apk_folder_files))
     '''
     per avre la lista dei nomi senza doverli copiare uino ad uno
     '''
-    #print(str(wav), end=",")
+    print(str(wav.split(".")[0]), end=",") #TODO: levare lo split perché ci sono i trusted con il punto aggiornare il wavextract
