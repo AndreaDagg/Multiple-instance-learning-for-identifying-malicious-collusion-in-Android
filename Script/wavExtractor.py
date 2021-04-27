@@ -8,6 +8,9 @@ import librosa.display
 
 '''
 ------------------------------------ CONSIGLI SU COME RUNNARE IL CODICE -----------------------------
+Lo script genera due file data.csv data.arff a partire dagli audio splittati andando a valutare se il file è un acid e 
+quindi andando a leggere il tipo di classe (trusted,broadcast_intent,shared_preferences,external_storage)
+
 Inserire di volta in volta un blocco di cartelle splitted nella cartella Acid_Splitted o Trusted_Splitted
 Modificare la variagile @genres con il nome cartella che si sta elaborando (file trusted / oppure acid)
 In pannello di contorllo in risparmi energetico abbasssare la potenza della cpu 
@@ -100,8 +103,8 @@ Blocco per eseguire lo script in più running - evitare alte temperature prolung
 @genres la variabile che prende il nome della cartella che si sta analizzando (Trusted or Acid)
 Decommentare la corrispondente dell'elaborazione per far funzionare lo script correttamente
 '''
-# genres = "Trusted_Splitted"
-genres = "Acid_Splitted"
+genres = "Trusted_Splitted"
+# genres = "Acid_Splitted"
 
 i = 1
 trustedOrAcidDirectory = genres
@@ -142,6 +145,7 @@ for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDir
                         apkInt += 1
 
         for splittedAudio in os.listdir(pathSplittedAudioDirectory):
+            # path completa al file da analizzare
             splittedAudioPath = os.path.join(pathSplittedAudioDirectory, f'{splittedAudio}')
 
             '''
