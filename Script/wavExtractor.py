@@ -29,23 +29,6 @@ audio_folder = os.path.join(apk_folder, "audio")  # base_path/apk/audio
 trusted_Acid_Folder = os.path.join(apk_folder, "trusted_Acid")
 trusted_Apk_Folder = os.path.join(audio_folder, "trusted_audio_trusted_apk")
 
-print("basePath: ", base_path)
-print("Apk Folder: ", apk_folder)
-print("Audio Folder: ", audio_folder)
-
-'''
-@header: E' la stringa della prima riga del file csv
-@.split():  Split a string into a list where each word is a list item:
-
-'''
-# header = 'filename chroma_stft rmse spectral_centroid spectral_bandwidth rolloff zero_crossing_rate'
-header = 'filename chroma_stft spectral_centroid spectral_bandwidth rolloff zero_crossing_rate'
-
-for i in range(1, 21):
-    header += f' mfcc{i}'
-header += ' class'
-header = header.split()
-
 '''
 @open():    "w" - Write - Opens a file for writing, creates the file if it does not exist
 @with:      Dopo aver aperto il file, with crea un gestore di contesto e chiuderà automaticamente il gestore di file quando avrà finito. Mentre con open avremmo dovuto chiuderlo noi.
@@ -57,32 +40,14 @@ header = header.split()
 
 file = open('data.csv', 'w', newline='')
 
-with file:
-    writer = csv.writer(file)
-    writer.writerow(header)
 '''
 Genera il file .arff automaticamente andando a prendere i nomi dei file
-ATTENZIONE: Le classi sono statiche
+
 '''
-fileArff = open('data.arff', 'a', newline='')
-fileArff.write("@relation virus\n\n")
-fileArff.write("@attribute virus_bag{")
+import wavDatasetLib
+wavDatasetLib.createArff("data", "virus", wavDatasetLib.getHeaderAttributes(), "real",
+                         ['trusted', 'broadcast_intent', 'shared_preferences', 'external_storage'])
 
-for wav in os.listdir(trusted_Acid_Folder):
-    fileArff.write(f'{str(wav.split(".")[0])}{".wav"}{","}')
-for wav in os.listdir(trusted_Apk_Folder):
-    fileArff.write(f'{str(wav)}{","}')
-fileArff.write("}\n")
-fileArff.write("@attribute bag relational\n")
-
-for label in header:
-    if (label == "class" or label == "filename"):  # salto le label class e label
-        continue
-    fileArff.write(f'{"@attribute"} {label} {"real"}\n')
-fileArff.write("@end bag\n")
-fileArff.write("@attribute class{trusted,broadcast_intent,shared_preferences,external_storage}\n\n")
-fileArff.write("@data\n")
-fileArff.close()
 '''
 @genres:        crea una lista di elementi "trusted" and "malware"
 @os.listdir:    restituisce una lista contenente i nomi delle voci nella directory data da path. L'elenco è in ordine arbitrario. Non include le voci speciali "." e '..' anche se sono presenti nella directory.
@@ -140,7 +105,7 @@ for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDir
                             with open(f'{acidDatasetFolder}\\{setFold}\\{"description.txt"}', 'r') as reader:
                                 # estrggo dalla stringa il tipo di malware
                                 malwareType = reader.read().split(":")[1]
-                                #print("Malware Type: ", malwareType)
+                                # print("Malware Type: ", malwareType)
                                 classe = malwareType
                         apkInt += 1
         to_append_arff = ""
@@ -173,14 +138,15 @@ for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDir
             zcr = librosa.feature.zero_crossing_rate(y)
             mfcc = librosa.feature.mfcc(y=y, sr=sr)
             to_append = f'{audioTitle}{".wav"} {np.mean(chroma_stft)} {np.mean(spec_cent)} {np.mean(spec_bw)} {np.mean(rolloff)} {np.mean(zcr)}'
+
             # if     è il primo elemento della bag devo precedere alla virgolette il nome id della bag
             # else   devo iniziare con \n per differenziare le istanze delle bag e non va più audio_title ma direttamente le features
             if (iterationNumb == 1):
-                #print("\nPrimo")
+                # print("\nPrimo")
                 iterationNumb += 1
                 to_append_arff = f'{audioTitle}{".wav"}{","}\"{np.mean(chroma_stft)}{","}{np.mean(spec_cent)}{","}{np.mean(spec_bw)}{","}{np.mean(rolloff)}{","}{np.mean(zcr)}{","}'
             else:
-                #print("\nelse Log")
+                # print("\nelse Log")
                 to_append_arff += f'\\n{np.mean(chroma_stft)}{","}{np.mean(spec_cent)}{","}{np.mean(spec_bw)}{","}{np.mean(rolloff)}{","}{np.mean(zcr)}{","}'
 
             iterIndex = 1
@@ -196,13 +162,13 @@ for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDir
             to_append += f' {classe}'  # ultima colonna label
             # to_append_arff += f'{classe}\n'  # ultima colonna label
 
-            file = open('data.csv', 'a', newline='')  # apre il file in modalità aggiunta
+            file = open('results\\data.csv', 'a', newline='')  # apre il file in modalità aggiunta
             writer = csv.writer(file)  # aggiungiamo la riga al file
-            writer.writerow(to_append.split())
+            writer.writerow(to_append_arff.split())
 
         iterationNumb = 0
         to_append_arff += f'\"{","}{classe}\n'  # ultima colonna label
         # scrivo la riga .arff
-        fileArff = open('data.arff', 'a', newline='')
+        fileArff = open('results\\data.arff', 'a', newline='')
         fileArff.writelines(to_append_arff)
         fileArff.close()
