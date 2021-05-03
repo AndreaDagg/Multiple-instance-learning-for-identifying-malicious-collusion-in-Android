@@ -36,15 +36,21 @@ trusted_Apk_Folder = os.path.join(audio_folder, "trusted_audio_trusted_apk")
 
 @Writer:    Capire Ritorna un oggetto writer per covertire un dato e per permettere di scrivere all'interno del file che abbiamo generato o aperto per scrivere una nuva riga nel file si usa il metodo 
             @writerow passando la strigna da inserire. Nel nostro caso trasformera la stringa in un csv (abbiamo creato l'oggetto writer) andando a sostituire agli spazi le virgole
+
+Apriamo entrambi i file in "w" così da eliminare i vecchi
 '''
 
-file = open('data.csv', 'w', newline='')
+file = open('results\\data.csv', 'w', newline='')  # apre il file in modalità aggiunta
+writer = csv.writer(file)  # aggiungiamo la riga al file
+writer.writerow(["", "", ""])  # prima riga vuota per far funzionare lo script wav_get_put_dataset
+file.close()
+
 
 '''
 Genera il file .arff automaticamente andando a prendere i nomi dei file
-
 '''
 import wavDatasetLib
+
 wavDatasetLib.createArff("data", "virus", wavDatasetLib.getHeaderAttributes(), "real",
                          ['trusted', 'broadcast_intent', 'shared_preferences', 'external_storage'])
 
@@ -73,6 +79,7 @@ genres = "Acid_Splitted"
 
 i = 1
 trustedOrAcidDirectory = genres
+
 for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDirectory}"):
     print("Iterata:  ", i)
     i += 1
@@ -109,7 +116,10 @@ for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDir
                                 classe = malwareType
                         apkInt += 1
         to_append_arff = ""
-        iterationNumb = 1
+        to_append = ""
+        featureOfBag = 1
+        latestSplitter = os.listdir(pathSplittedAudioDirectory)[
+            len(os.listdir(pathSplittedAudioDirectory)) - 1]  # ultimo splitting apk
         for splittedAudio in os.listdir(pathSplittedAudioDirectory):
             # path completa al file da analizzare
             splittedAudioPath = os.path.join(pathSplittedAudioDirectory, f'{splittedAudio}')
@@ -137,38 +147,40 @@ for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDir
             rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr)
             zcr = librosa.feature.zero_crossing_rate(y)
             mfcc = librosa.feature.mfcc(y=y, sr=sr)
-            to_append = f'{audioTitle}{".wav"} {np.mean(chroma_stft)} {np.mean(spec_cent)} {np.mean(spec_bw)} {np.mean(rolloff)} {np.mean(zcr)}'
+
+            to_append += f'{np.mean(chroma_stft)}{","}{np.mean(spec_cent)}{","}{np.mean(spec_bw)}{","}{np.mean(rolloff)}{","}{np.mean(zcr)}{","}'
 
             # if     è il primo elemento della bag devo precedere alla virgolette il nome id della bag
             # else   devo iniziare con \n per differenziare le istanze delle bag e non va più audio_title ma direttamente le features
-            if (iterationNumb == 1):
-                # print("\nPrimo")
-                iterationNumb += 1
+            if (featureOfBag == 1):
+                featureOfBag += 1
                 to_append_arff = f'{audioTitle}{".wav"}{","}\"{np.mean(chroma_stft)}{","}{np.mean(spec_cent)}{","}{np.mean(spec_bw)}{","}{np.mean(rolloff)}{","}{np.mean(zcr)}{","}'
             else:
-                # print("\nelse Log")
                 to_append_arff += f'\\n{np.mean(chroma_stft)}{","}{np.mean(spec_cent)}{","}{np.mean(spec_bw)}{","}{np.mean(rolloff)}{","}{np.mean(zcr)}{","}'
 
-            iterIndex = 1
+            splittedFeature = 1
             for e in mfcc:
-                if (iterIndex == len(mfcc)):  # all'ultima features dell'istnza non mi serve inserire la virgola
+                if (splittedFeature == len(mfcc)):  # all'ultima features dell'istnza non mi serve inserire la virgola
                     to_append_arff += f'{np.mean(e)}'  # media dei valori in mfcc
+                    to_append += f' {np.mean(e)}'
                 else:
                     to_append_arff += f'{np.mean(e)}{","}'  # media dei valori in mfcc
-                to_append += f' {np.mean(e)}'  # media dei valori in mfcc
-                iterIndex += 1
+                    to_append += f' {np.mean(e)}{","}'
+                # media dei valori in mfcc
+                splittedFeature += 1
+            # Finisco l'i-mo to_appen e devo inserire \n per differenziare le feature
+            if splittedAudio != latestSplitter:
+                to_append += "\\n"
 
-                # Attributo label
-            to_append += f' {classe}'  # ultima colonna label
-            # to_append_arff += f'{classe}\n'  # ultima colonna label
-
-            file = open('results\\data.csv', 'a', newline='')  # apre il file in modalità aggiunta
-            writer = csv.writer(file)  # aggiungiamo la riga al file
-            writer.writerow(to_append_arff.split())
-
-        iterationNumb = 0
+        featureOfBag = 0
         to_append_arff += f'\"{","}{classe}\n'  # ultima colonna label
+
         # scrivo la riga .arff
         fileArff = open('results\\data.arff', 'a', newline='')
         fileArff.writelines(to_append_arff)
         fileArff.close()
+
+        file = open('results\\data.csv', 'a', newline='')  # apre il file in modalità aggiunta
+        writer = csv.writer(file)  # aggiungiamo la riga al file
+        writer.writerow([audioTitle + ".wav", to_append, classe])
+        file.close()

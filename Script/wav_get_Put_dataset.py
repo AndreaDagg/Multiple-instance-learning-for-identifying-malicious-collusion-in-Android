@@ -26,7 +26,7 @@ smisted_file = load_smisted_file.active
  
  Non deve avere la colonna con gli indici delle colonne ma la prima riga dev'essere vuota
 '''
-dataset_csv = pd.read_csv('data.csv')
+dataset_csv = pd.read_csv('results\\data.csv')
 
 '''
 Usiamo le funzioni definite nello script wavDatasetLib per creare il file .arff
@@ -37,7 +37,8 @@ import wavDatasetLib
 put_type = str(smisted_file.cell(row=1, column=3).value).replace(" ", "_")  # put
 get_type = str(smisted_file.cell(row=1, column=4).value).replace(" ", "_")  # get
 wavDatasetLib.createArff("dataGetPut", "virus", wavDatasetLib.getHeaderAttributes(), "real", [get_type, put_type])
-
+fileArff = open("results\\dataGetPut.arff", 'a', newline='')
+fileArff.close()
 '''
 @valueID: stringe del nome dell'ima applicazione
 @:return una strigna che identifica l'applicazione come PUT o GET 

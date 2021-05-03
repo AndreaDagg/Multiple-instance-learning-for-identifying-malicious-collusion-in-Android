@@ -79,7 +79,7 @@ def createArff(nameFile, relation, attributes_list, attributes_type, class_list,
         print("Ho creato la  cartella results...")
 
     print("Creo il file...")
-    fileArff = open("results\\" + nameFile + ".arff", 'a', newline='')
+    fileArff = open("results\\" + nameFile + ".arff", 'w', newline='')
     fileArff.write("@relation " + relation + "\n\n")  # relazione del file
     fileArff.write("@attribute virus_id{")  # settiamo la lista di attributi bag_id or virus_id
     for wav in getDatasetWavName():
