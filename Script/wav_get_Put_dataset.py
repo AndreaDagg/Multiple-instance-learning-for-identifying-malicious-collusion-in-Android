@@ -66,7 +66,7 @@ def getTypeOfApp(valueID):
         else:
             continue
 
-#TODO: inserire i dati in results
+
 
 for index, row in dataset_csv.iterrows():  # iteriamo sulle righe
     typeWav = row[2]  # ritorna ultima colonna con il tipo della risorsa
