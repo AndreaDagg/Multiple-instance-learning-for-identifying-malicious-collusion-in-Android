@@ -21,7 +21,7 @@ import math
 import os
 from pydub import AudioSegment
 
-'''
+''' ************************************ SETTA IL DATASET DA CUI SPLITTARE ********************************************
 if true significa che stiamo convertendo gli apk del dataset Trusted
 If false significa che stiamo convertendo gi apk del dataset ACID
 '''
@@ -93,7 +93,7 @@ def splittingWav(pathToOriginalWav, pathToSplittedWav):
 - Get positive split duration
 @splittingsuration:     Variabile globale data in input, rappresenta la durata dei file splittati
 '''
-splittingduration = 2093
+splittingduration = 1046
 '''
 while ((type(splittingduration) != float) or (splittingduration <= 0)):
     splittingduration = input("Splittingduration (Seconds): ")
@@ -131,10 +131,12 @@ else:
 
 
 print("Log  -> trusted_audio", trusted_audio, "\n")
-
+logIteration = 1
 # Itera su tutti i file .wav nella cartella trusted_audio
 for wav_file in os.listdir(trusted_audio):
     if wav_file.endswith(".wav"):
+        print("Iteration number: ", logIteration)
+        logIteration += 1
         print("wav_Files-> ", wav_file)
         # creo la sottocartella dove inserirò il file audio suddiviso
         wavSplittedDirectory = createNewDirectory(Path_SubDirectory, str(wav_file))

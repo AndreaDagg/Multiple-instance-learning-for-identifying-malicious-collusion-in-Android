@@ -53,6 +53,8 @@ import wavDatasetLib
 
 wavDatasetLib.createArff("data", "virus", wavDatasetLib.getHeaderAttributes(), "real",
                          ['trusted', 'broadcast_intent', 'shared_preferences', 'external_storage'])
+wavDatasetLib.createArff("dataBinary", "virus", wavDatasetLib.getHeaderAttributes(), "real",
+                         ['trusted', 'malware'])
 
 '''
 @genres:        crea una lista di elementi "trusted" and "malware"
@@ -74,7 +76,7 @@ Blocco per eseguire lo script in più running - evitare alte temperature prolung
 @genres la variabile che prende il nome della cartella che si sta analizzando (Trusted or Acid)
 Decommentare la corrispondente dell'elaborazione per far funzionare lo script correttamente
 '''
-# genres = "Trusted_Splitted"
+#genres = "Trusted_Splitted"
 genres = "Acid_Splitted"
 
 i = 1
@@ -173,13 +175,27 @@ for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDir
                 to_append += "\\n"
 
         featureOfBag = 0
+        to_append_arff_Binary = to_append_arff
         to_append_arff += f'\"{","}{classe}\n'  # ultima colonna label
+
+        '''
+        Scriviamo un ulteriore file arff che conterra i risultati solamente con class label come trusted or malware
+        controllando il tipo di splitted che stiamo elborando
+        '''
+
+        if genres == "Acid_Splitted":
+            to_append_arff_Binary += f'\"{","}{"malware"}\n'  # ultima colonna label
+        else:
+            to_append_arff_Binary += f'\"{","}{"trusted"}\n'  # ultima colonna label
+        fileArff = open('results\\dataBinary.arff', 'a', newline='')
+        fileArff.writelines(to_append_arff_Binary)
+        fileArff.close()
 
         # scrivo la riga .arff
         fileArff = open('results\\data.arff', 'a', newline='')
         fileArff.writelines(to_append_arff)
         fileArff.close()
-
+        #scrivo riga nel file csv
         file = open('results\\data.csv', 'a', newline='')  # apre il file in modalità aggiunta
         writer = csv.writer(file)  # aggiungiamo la riga al file
         writer.writerow([audioTitle + ".wav", to_append, classe])
