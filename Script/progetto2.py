@@ -40,7 +40,7 @@ header = header.split()
 @Writer:    Capire Ritorna un oggetto writer per covertire un dato e per permettere di scrivere all'interno del file che abbiamo generato o aperto per scrivere una nuva riga nel file si usa il metodo 
             @writerow passando la strigna da inserire. Nel nostro caso trasformera la stringa in un csv (abbiamo creato l'oggetto writer) andando a sostituire agli spazi le virgole
 '''
-file = open('data.csv', 'w', newline='')
+file = open('results/data.csv', 'w', newline='')
 with file:
     writer = csv.writer(file)
     writer.writerow(header)
@@ -86,6 +86,6 @@ for g in genres:
             to_append += f' {np.mean(e)}'  # media dei valori in mfcc
         to_append += f' {g}'  # ultima colonna label
 
-        file = open('data.csv', 'a', newline='')  # apre il file in modalità aggiunta
+        file = open('results/data.csv', 'a', newline='')  # apre il file in modalità aggiunta
         writer = csv.writer(file)  # aggiungiamo la riga al file
         writer.writerow(to_append.split())

@@ -29,23 +29,6 @@ audio_folder = os.path.join(apk_folder, "audio")  # base_path/apk/audio
 trusted_Acid_Folder = os.path.join(apk_folder, "trusted_Acid")
 trusted_Apk_Folder = os.path.join(audio_folder, "trusted_audio_trusted_apk")
 
-print("basePath: ", base_path)
-print("Apk Folder: ", apk_folder)
-print("Audio Folder: ", audio_folder)
-
-'''
-@header: E' la stringa della prima riga del file csv
-@.split():  Split a string into a list where each word is a list item:
-
-'''
-# header = 'filename chroma_stft rmse spectral_centroid spectral_bandwidth rolloff zero_crossing_rate'
-header = 'filename chroma_stft spectral_centroid spectral_bandwidth rolloff zero_crossing_rate'
-
-for i in range(1, 21):
-    header += f' mfcc{i}'
-header += ' class'
-header = header.split()
-
 '''
 @open():    "w" - Write - Opens a file for writing, creates the file if it does not exist
 @with:      Dopo aver aperto il file, with crea un gestore di contesto e chiuderà automaticamente il gestore di file quando avrà finito. Mentre con open avremmo dovuto chiuderlo noi.
@@ -53,36 +36,26 @@ header = header.split()
 
 @Writer:    Capire Ritorna un oggetto writer per covertire un dato e per permettere di scrivere all'interno del file che abbiamo generato o aperto per scrivere una nuva riga nel file si usa il metodo 
             @writerow passando la strigna da inserire. Nel nostro caso trasformera la stringa in un csv (abbiamo creato l'oggetto writer) andando a sostituire agli spazi le virgole
+
+Apriamo entrambi i file in "w" così da eliminare i vecchi
 '''
 
-file = open('data.csv', 'w', newline='')
+file = open('results\\data.csv', 'w', newline='')  # apre il file in modalità aggiunta
+writer = csv.writer(file)  # aggiungiamo la riga al file
+writer.writerow(["", "", ""])  # prima riga vuota per far funzionare lo script wav_get_put_dataset
+file.close()
 
-with file:
-    writer = csv.writer(file)
-    writer.writerow(header)
+
 '''
 Genera il file .arff automaticamente andando a prendere i nomi dei file
-ATTENZIONE: Le classi sono statiche
 '''
-fileArff = open('data.arff', 'a', newline='')
-fileArff.write("@relation virus\n\n")
-fileArff.write("@attribute virus_bag{")
+import wavDatasetLib
 
-for wav in os.listdir(trusted_Acid_Folder):
-    fileArff.write(f'{str(wav.split(".")[0])}{".wav"}{","}')
-for wav in os.listdir(trusted_Apk_Folder):
-    fileArff.write(f'{str(wav)}{","}')
-fileArff.write("}\n")
-fileArff.write("@attribute bag relational\n")
+wavDatasetLib.createArff("data", "virus", wavDatasetLib.getHeaderAttributes(), "real",
+                         ['trusted', 'broadcast_intent', 'shared_preferences', 'external_storage'])
+wavDatasetLib.createArff("dataBinary", "virus", wavDatasetLib.getHeaderAttributes(), "real",
+                         ['trusted', 'malware'])
 
-for label in header:
-    if (label == "class" or label == "filename"):  # salto le label class e label
-        continue
-    fileArff.write(f'{"@attribute"} {label} {"real"}\n')
-fileArff.write("@end bag\n")
-fileArff.write("@attribute class{trusted,broadcast_intent,shared_preferences,external_storage}\n\n")
-fileArff.write("@data\n")
-fileArff.close()
 '''
 @genres:        crea una lista di elementi "trusted" and "malware"
 @os.listdir:    restituisce una lista contenente i nomi delle voci nella directory data da path. L'elenco è in ordine arbitrario. Non include le voci speciali "." e '..' anche se sono presenti nella directory.
@@ -103,11 +76,12 @@ Blocco per eseguire lo script in più running - evitare alte temperature prolung
 @genres la variabile che prende il nome della cartella che si sta analizzando (Trusted or Acid)
 Decommentare la corrispondente dell'elaborazione per far funzionare lo script correttamente
 '''
-# genres = "Trusted_Splitted"
+#genres = "Trusted_Splitted"
 genres = "Acid_Splitted"
 
 i = 1
 trustedOrAcidDirectory = genres
+
 for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDirectory}"):
     print("Iterata:  ", i)
     i += 1
@@ -140,11 +114,14 @@ for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDir
                             with open(f'{acidDatasetFolder}\\{setFold}\\{"description.txt"}', 'r') as reader:
                                 # estrggo dalla stringa il tipo di malware
                                 malwareType = reader.read().split(":")[1]
-                                #print("Malware Type: ", malwareType)
+                                # print("Malware Type: ", malwareType)
                                 classe = malwareType
                         apkInt += 1
         to_append_arff = ""
-        iterationNumb = 1
+        to_append = ""
+        featureOfBag = 1
+        latestSplitter = os.listdir(pathSplittedAudioDirectory)[
+            len(os.listdir(pathSplittedAudioDirectory)) - 1]  # ultimo splitting apk
         for splittedAudio in os.listdir(pathSplittedAudioDirectory):
             # path completa al file da analizzare
             splittedAudioPath = os.path.join(pathSplittedAudioDirectory, f'{splittedAudio}')
@@ -172,37 +149,54 @@ for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDir
             rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr)
             zcr = librosa.feature.zero_crossing_rate(y)
             mfcc = librosa.feature.mfcc(y=y, sr=sr)
-            to_append = f'{audioTitle}{".wav"} {np.mean(chroma_stft)} {np.mean(spec_cent)} {np.mean(spec_bw)} {np.mean(rolloff)} {np.mean(zcr)}'
+
+            to_append += f'{np.mean(chroma_stft)}{","}{np.mean(spec_cent)}{","}{np.mean(spec_bw)}{","}{np.mean(rolloff)}{","}{np.mean(zcr)}{","}'
+
             # if     è il primo elemento della bag devo precedere alla virgolette il nome id della bag
             # else   devo iniziare con \n per differenziare le istanze delle bag e non va più audio_title ma direttamente le features
-            if (iterationNumb == 1):
-                #print("\nPrimo")
-                iterationNumb += 1
+            if (featureOfBag == 1):
+                featureOfBag += 1
                 to_append_arff = f'{audioTitle}{".wav"}{","}\"{np.mean(chroma_stft)}{","}{np.mean(spec_cent)}{","}{np.mean(spec_bw)}{","}{np.mean(rolloff)}{","}{np.mean(zcr)}{","}'
             else:
-                #print("\nelse Log")
                 to_append_arff += f'\\n{np.mean(chroma_stft)}{","}{np.mean(spec_cent)}{","}{np.mean(spec_bw)}{","}{np.mean(rolloff)}{","}{np.mean(zcr)}{","}'
 
-            iterIndex = 1
+            splittedFeature = 1
             for e in mfcc:
-                if (iterIndex == len(mfcc)):  # all'ultima features dell'istnza non mi serve inserire la virgola
+                if (splittedFeature == len(mfcc)):  # all'ultima features dell'istnza non mi serve inserire la virgola
                     to_append_arff += f'{np.mean(e)}'  # media dei valori in mfcc
+                    to_append += f' {np.mean(e)}'
                 else:
                     to_append_arff += f'{np.mean(e)}{","}'  # media dei valori in mfcc
-                to_append += f' {np.mean(e)}'  # media dei valori in mfcc
-                iterIndex += 1
+                    to_append += f' {np.mean(e)}{","}'
+                # media dei valori in mfcc
+                splittedFeature += 1
+            # Finisco l'i-mo to_appen e devo inserire \n per differenziare le feature
+            if splittedAudio != latestSplitter:
+                to_append += "\\n"
 
-                # Attributo label
-            to_append += f' {classe}'  # ultima colonna label
-            # to_append_arff += f'{classe}\n'  # ultima colonna label
-
-            file = open('data.csv', 'a', newline='')  # apre il file in modalità aggiunta
-            writer = csv.writer(file)  # aggiungiamo la riga al file
-            writer.writerow(to_append.split())
-
-        iterationNumb = 0
+        featureOfBag = 0
+        to_append_arff_Binary = to_append_arff
         to_append_arff += f'\"{","}{classe}\n'  # ultima colonna label
+
+        '''
+        Scriviamo un ulteriore file arff che conterra i risultati solamente con class label come trusted or malware
+        controllando il tipo di splitted che stiamo elborando
+        '''
+
+        if genres == "Acid_Splitted":
+            to_append_arff_Binary += f'\"{","}{"malware"}\n'  # ultima colonna label
+        else:
+            to_append_arff_Binary += f'\"{","}{"trusted"}\n'  # ultima colonna label
+        fileArff = open('results\\dataBinary.arff', 'a', newline='')
+        fileArff.writelines(to_append_arff_Binary)
+        fileArff.close()
+
         # scrivo la riga .arff
-        fileArff = open('data.arff', 'a', newline='')
+        fileArff = open('results\\data.arff', 'a', newline='')
         fileArff.writelines(to_append_arff)
         fileArff.close()
+        #scrivo riga nel file csv
+        file = open('results\\data.csv', 'a', newline='')  # apre il file in modalità aggiunta
+        writer = csv.writer(file)  # aggiungiamo la riga al file
+        writer.writerow([audioTitle + ".wav", to_append, classe])
+        file.close()
