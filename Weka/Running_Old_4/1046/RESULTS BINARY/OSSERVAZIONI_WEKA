@@ -1,0 +1,145 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.mi.TLDSimple -R 1 -S 1
+Relation:     virus
+Instances:    682
+Attributes:   3
+              virus_id
+              bag
+              class
+Test mode:    10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+
+
+TLDSimple:
+
+chroma_stft
+Positive: sigma^2=1.1398932131430959E-4, w=1.0E-12, m=0.11840509826571056
+Negative: sigma^2=4.8217350495336025E-5, w=1.0E-12, m=0.126590987556455
+
+spectral_centroid
+Positive: sigma^2=9413.98271444732, w=1.0E-12, m=1202.131472591445
+Negative: sigma^2=3596.5898514699015, w=491.5182230457584, m=1267.0264261005198
+
+spectral_bandwidth
+Positive: sigma^2=67276.69977532403, w=1.0E-12, m=1003.9690480467315
+Negative: sigma^2=25530.052964468345, w=3578.865003895369, m=1178.2453290037463
+
+rolloff
+Positive: sigma^2=86011.1519484417, w=1.0E-12, m=1318.8638973877084
+Negative: sigma^2=33146.07655028007, w=4422.34226601698, m=1515.1107329669915
+
+zero_crossing_rate
+Positive: sigma^2=2.152262062985294E-6, w=1.0E-12, m=0.09275277169837712
+Negative: sigma^2=3.643710076964217E-8, w=1.0E-12, m=0.09275999188622897
+
+mfcc1
+Positive: sigma^2=51192.456605695465, w=1.0E-12, m=-278.38960643244764
+Negative: sigma^2=19118.899416439865, w=2721.752079438432, m=-125.3885764924525
+
+mfcc2
+Positive: sigma^2=6931.944457990184, w=1.0E-12, m=84.97906540234473
+Negative: sigma^2=2591.982248584622, w=389.5732554232457, m=141.76976189515824
+
+mfcc3
+Positive: sigma^2=513.8309848171577, w=1.0E-12, m=-25.09618583135933
+Negative: sigma^2=192.3716878866424, w=28.653415186674746, m=-40.522489927807186
+
+mfcc4
+Positive: sigma^2=20.47266811494376, w=1.0E-12, m=-31.76964793842441
+Negative: sigma^2=8.191038512023244, w=1.33247957429989, m=-34.84765094850122
+
+mfcc5
+Positive: sigma^2=8.391112557353987, w=1.0E-12, m=-33.01562825319039
+Negative: sigma^2=3.6043596118283863, w=0.504922032110821, m=-34.86734186321578
+
+mfcc6
+Positive: sigma^2=5.393327295200992, w=1.0E-12, m=3.5307977625108715
+Negative: sigma^2=2.506736196642361, w=0.1811401524019063, m=2.1690772344936686
+
+mfcc7
+Positive: sigma^2=400.9108494760967, w=1.0E-12, m=22.93331287228559
+Negative: sigma^2=152.50910692111376, w=20.320490240966702, m=9.401016782625893
+
+mfcc8
+Positive: sigma^2=382.7998105484543, w=1.0E-12, m=19.122820008314065
+Negative: sigma^2=148.0922102800553, w=18.519129937535173, m=6.176291347570676
+
+mfcc9
+Positive: sigma^2=126.91433575449709, w=1.0E-12, m=-4.470611769843699
+Negative: sigma^2=52.24475132075886, w=5.676165760132132, m=-11.679492571936793
+
+mfcc10
+Positive: sigma^2=30.065228332222343, w=1.0E-12, m=-11.730352711572793
+Negative: sigma^2=11.42372458069437, w=1.5895633426597522, m=-8.002966664172938
+
+mfcc11
+Positive: sigma^2=173.06579532320472, w=1.0E-12, m=-19.98894753903497
+Negative: sigma^2=65.07525786674059, w=8.692657885028584, m=-11.175698717710569
+
+mfcc12
+Positive: sigma^2=19.143594506557257, w=1.0E-12, m=-4.415469056475329
+Negative: sigma^2=7.415973354579804, w=1.062073134242905, m=-1.3962186594142392
+
+mfcc13
+Positive: sigma^2=209.2237486719605, w=1.0E-12, m=0.5276549930380248
+Negative: sigma^2=82.7566871488788, w=10.155833861768569, m=-9.045877112941872
+
+mfcc14
+Positive: sigma^2=508.7541339624609, w=1.0E-12, m=28.917250889744615
+Negative: sigma^2=192.5222265766496, w=26.421227089883807, m=13.614721928259858
+
+mfcc15
+Positive: sigma^2=28.06862280523822, w=1.0E-12, m=11.329422835248113
+Negative: sigma^2=13.398667172055276, w=1.777767828628543, m=7.498271076387975
+
+mfcc16
+Positive: sigma^2=2.2256038957000635, w=1.0E-12, m=-1.867151671227759
+Negative: sigma^2=1.844753324388424, w=0.07417657680111306, m=-1.0405876750487228
+
+mfcc17
+Positive: sigma^2=2.3609006159526236, w=1.0E-12, m=-20.60223172449826
+Negative: sigma^2=3.2806503763313555, w=1.0E-12, m=-19.976201723121736
+
+mfcc18
+Positive: sigma^2=129.30534744278827, w=1.0E-12, m=-12.825786144922947
+Negative: sigma^2=48.89757477390415, w=6.783532885912949, m=-5.119733139700033
+
+mfcc19
+Positive: sigma^2=2.2282829733836453, w=1.0E-12, m=3.741899512817951
+Negative: sigma^2=2.0284923825043655, w=0.0440969162929429, m=4.751760158563238
+
+mfcc20
+Positive: sigma^2=267.12164014618463, w=1.0E-12, m=15.393159364767945
+Negative: sigma^2=98.23327681696549, w=13.518777097059631, m=4.800436488069015
+
+
+Time taken to build model: 0.05 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances         200               29.3255 %
+Incorrectly Classified Instances       482               70.6745 %
+Kappa statistic                          0     
+Mean absolute error                      0.7067
+Root mean squared error                  0.8407
+Relative absolute error                170.3854 %
+Root relative squared error            184.6613 %
+Total Number of Instances              682     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 1.000    1.000    0.293      1.000    0.454      ?        0.500     0.293     trusted
+                 0.000    0.000    ?          0.000    ?          ?        0.500     0.707     malware
+Weighted Avg.    0.293    0.293    ?          0.293    ?          ?        0.500     0.585     
+
+=== Confusion Matrix ===
+
+   a   b   <-- classified as
+ 200   0 |   a = trusted
+ 482   0 |   b = malware
+

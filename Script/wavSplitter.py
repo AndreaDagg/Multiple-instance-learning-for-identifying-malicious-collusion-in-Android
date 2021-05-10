@@ -22,10 +22,15 @@ import os
 from pydub import AudioSegment
 
 ''' ************************************ SETTA IL DATASET DA CUI SPLITTARE ********************************************
+@DatasetTypeTrusted: 
 if true significa che stiamo convertendo gli apk del dataset Trusted
 If false significa che stiamo convertendo gi apk del dataset ACID
+
+@Test_apk: 
+if true significa che stiamo convertendo gli apk di test 
 '''
-DatasetTypeTrusted = False
+DatasetTypeTrusted = True
+Test_apk = True
 
 '''
 createNewDirectory 
@@ -111,29 +116,32 @@ base_path = os.getcwd()
 apk_folder = os.path.join(base_path, "apk")
 audio_folder = os.path.join(apk_folder, "audio")
 
-
 createNewDirectory(audio_folder, "Splitted_Wav")
 SplittedDirectory = os.path.join(audio_folder, "Splitted_Wav")  # path alla dierctory dei file splitted
 createNewDirectory(SplittedDirectory, "Acid_Splitted")
 createNewDirectory(SplittedDirectory, "Trusted_Splitted")
+createNewDirectory(SplittedDirectory, "Tested_Splitted")
 Acid_Splitted_Directory = os.path.join(SplittedDirectory, "Acid_Splitted")
 Trusted_Splitted_Directory = os.path.join(SplittedDirectory, "Trusted_Splitted")
+Test_splitted_Direcotory = os.path.join(SplittedDirectory, "Tested_Splitted")
 '''
-@trusted_audio  Se dobbiamo splittare i file trusted si imposta la variabile globale
+@unsplit_audio_folder  Se dobbiamo splittare i file trusted si imposta la variabile globale
                 @DatasetTypeTrusted a TRUE altrimenti a FALSE e si assegna la path alla cartella 
 '''
-if (DatasetTypeTrusted):  # controllo sul dataset in elaborazione
-    trusted_audio = os.path.join(audio_folder, "trusted_audio_trusted_apk")
+if (DatasetTypeTrusted and Test_apk):  # controllo sul dataset in elaborazione
+    unsplit_audio_folder = os.path.join(audio_folder, "trusted_audio_Test_apk")
+    Path_SubDirectory = Test_splitted_Direcotory
+elif (DatasetTypeTrusted and (Test_apk == False)):
+    unsplit_audio_folder = os.path.join(audio_folder, "trusted_audio_trusted_apk")
     Path_SubDirectory = Trusted_Splitted_Directory
 else:
-    trusted_audio = os.path.join(audio_folder, "trusted")  # dataset acid
+    unsplit_audio_folder = os.path.join(audio_folder, "trusted")  # dataset acid
     Path_SubDirectory = Acid_Splitted_Directory
 
-
-print("Log  -> trusted_audio", trusted_audio, "\n")
+print("Log  -> trusted_audio", unsplit_audio_folder, "\n")
 logIteration = 1
 # Itera su tutti i file .wav nella cartella trusted_audio
-for wav_file in os.listdir(trusted_audio):
+for wav_file in os.listdir(unsplit_audio_folder):
     if wav_file.endswith(".wav"):
         print("Iteration number: ", logIteration)
         logIteration += 1
@@ -141,5 +149,5 @@ for wav_file in os.listdir(trusted_audio):
         # creo la sottocartella dove inserirò il file audio suddiviso
         wavSplittedDirectory = createNewDirectory(Path_SubDirectory, str(wav_file))
         print("LOG-> ", wavSplittedDirectory)
-        pathToOriginalWav = trusted_audio + "\\" + str(wav_file)  # path to original file .wav
+        pathToOriginalWav = unsplit_audio_folder + "\\" + str(wav_file)  # path to original file .wav
         splittingWav(pathToOriginalWav, wavSplittedDirectory)

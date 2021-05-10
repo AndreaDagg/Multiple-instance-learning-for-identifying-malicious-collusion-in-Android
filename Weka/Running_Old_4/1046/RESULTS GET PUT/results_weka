@@ -1,0 +1,145 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.mi.TLDSimple -R 1 -S 1
+Relation:     virus
+Instances:    482
+Attributes:   3
+              virus_id
+              bag
+              class
+Test mode:    10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+
+
+TLDSimple:
+
+chroma_stft
+Positive: sigma^2=1.1332155487893797E-4, w=1.0E-12, m=0.11839550854593779
+Negative: sigma^2=1.1466031746969542E-4, w=1.0E-12, m=0.11841482779913602
+
+spectral_centroid
+Positive: sigma^2=9370.383695414503, w=1.0E-12, m=1202.2801867841326
+Negative: sigma^2=9457.792604552602, w=1.0E-12, m=1201.980590214745
+
+spectral_bandwidth
+Positive: sigma^2=66972.462893954, w=1.0E-12, m=1004.431558274467
+Negative: sigma^2=67582.40812919218, w=1.0E-12, m=1003.4997946342127
+
+rolloff
+Positive: sigma^2=85574.53843619277, w=1.0E-12, m=1319.1430600485671
+Negative: sigma^2=86449.87718617472, w=1.0E-12, m=1318.5806646646245
+
+zero_crossing_rate
+Positive: sigma^2=2.152262062985294E-6, w=1.0E-12, m=0.09274430575999831
+Negative: sigma^2=0.0, w=1.0E-12, m=0.09276135952835353
+
+mfcc1
+Positive: sigma^2=50938.81000404052, w=1.0E-12, m=-278.02505603386004
+Negative: sigma^2=51447.32999483554, w=1.0E-12, m=-278.75947180690633
+
+mfcc2
+Positive: sigma^2=6906.233711768442, w=1.0E-12, m=85.21178671700055
+Negative: sigma^2=6957.779556840719, w=1.0E-12, m=84.74295111876917
+
+mfcc3
+Positive: sigma^2=511.5642029225883, w=1.0E-12, m=-25.140124818010456
+Negative: sigma^2=516.1087302320024, w=1.0E-12, m=-25.051606234645075
+
+mfcc4
+Positive: sigma^2=20.56736310347182, w=1.0E-12, m=-31.80111728009426
+Negative: sigma^2=20.377515124510463, w=1.0E-12, m=-31.737719788336562
+
+mfcc5
+Positive: sigma^2=8.3743012044424, w=1.0E-12, m=-33.02481879532138
+Negative: sigma^2=8.408005220077028, w=1.0E-12, m=-33.00630371721422
+
+mfcc6
+Positive: sigma^2=5.371452197964466, w=1.0E-12, m=3.5256040987486332
+Negative: sigma^2=5.415308193561412, w=1.0E-12, m=3.53606714748391
+
+mfcc7
+Positive: sigma^2=399.120800019631, w=1.0E-12, m=22.890345022040268
+Negative: sigma^2=402.7095566881044, w=1.0E-12, m=22.976907173875283
+
+mfcc8
+Positive: sigma^2=381.16337398935906, w=1.0E-12, m=19.077642708496455
+Negative: sigma^2=384.4441618987499, w=1.0E-12, m=19.16868302454957
+
+mfcc9
+Positive: sigma^2=126.25790303341833, w=1.0E-12, m=-4.485316383278856
+Negative: sigma^2=127.57394337893292, w=1.0E-12, m=-4.455692769959084
+
+mfcc10
+Positive: sigma^2=29.942887859344673, w=1.0E-12, m=-11.717311366998695
+Negative: sigma^2=30.188160517190983, w=1.0E-12, m=-11.743584192907148
+
+mfcc11
+Positive: sigma^2=172.39627926722028, w=1.0E-12, m=-19.953245717744384
+Negative: sigma^2=173.73854956142097, w=1.0E-12, m=-20.025169876335003
+
+mfcc12
+Positive: sigma^2=19.082737430868768, w=1.0E-12, m=-4.403380214906073
+Negative: sigma^2=19.204745923657534, w=1.0E-12, m=-4.4277341477524415
+
+mfcc13
+Positive: sigma^2=208.4189513326208, w=1.0E-12, m=0.49008289128656696
+Negative: sigma^2=210.03243849516403, w=1.0E-12, m=0.5657748786213184
+
+mfcc14
+Positive: sigma^2=506.6628281951538, w=1.0E-12, m=28.85702316039704
+Negative: sigma^2=510.8555545419763, w=1.0E-12, m=28.97835671147528
+
+mfcc15
+Positive: sigma^2=28.15510427151066, w=1.0E-12, m=11.29687707837741
+Negative: sigma^2=27.98172306259293, w=1.0E-12, m=11.362443094171605
+
+mfcc16
+Positive: sigma^2=2.267570881602321, w=1.0E-12, m=-1.8663245409760718
+Negative: sigma^2=2.183433932218934, w=1.0E-12, m=-1.867990860655206
+
+mfcc17
+Positive: sigma^2=2.4064134550737517, w=1.0E-12, m=-20.58259405684772
+Negative: sigma^2=2.3151676493743034, w=1.0E-12, m=-20.622155700242633
+
+mfcc18
+Positive: sigma^2=128.70339159630115, w=1.0E-12, m=-12.800003033664542
+Negative: sigma^2=129.91021470970935, w=1.0E-12, m=-12.851945161995065
+
+mfcc19
+Positive: sigma^2=2.2259861557367744, w=1.0E-12, m=3.7413527266869626
+Negative: sigma^2=2.230590899821754, w=1.0E-12, m=3.742454270837336
+
+mfcc20
+Positive: sigma^2=266.4773949471962, w=1.0E-12, m=15.339451982554264
+Negative: sigma^2=267.7690013023447, w=1.0E-12, m=15.447649775725173
+
+
+Time taken to build model: 0.01 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances         248               51.4523 %
+Incorrectly Classified Instances       234               48.5477 %
+Kappa statistic                          0.029 
+Mean absolute error                      0.4855
+Root mean squared error                  0.6968
+Relative absolute error                 97.0951 %
+Root relative squared error            139.351  %
+Total Number of Instances              482     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 1.000    0.971    0.507      1.000    0.673      0.121    0.519     0.510     APK_GET
+                 0.029    0.000    1.000      0.029    0.056      0.121    0.519     0.519     APK_PUT
+Weighted Avg.    0.515    0.485    0.754      0.515    0.365      0.121    0.519     0.514     
+
+=== Confusion Matrix ===
+
+   a   b   <-- classified as
+ 241   0 |   a = APK_GET
+ 234   7 |   b = APK_PUT
+
