@@ -45,7 +45,6 @@ writer = csv.writer(file)  # aggiungiamo la riga al file
 writer.writerow(["", "", ""])  # prima riga vuota per far funzionare lo script wav_get_put_dataset
 file.close()
 
-
 '''
 Genera il file .arff automaticamente andando a prendere i nomi dei file
 '''
@@ -73,17 +72,34 @@ for trustedOrAcidDirectory in genres:
 
 '''
 Blocco per eseguire lo script in più running - evitare alte temperature prolungate
-@genres la variabile che prende il nome della cartella che si sta analizzando (Trusted or Acid)
-Decommentare la corrispondente dell'elaborazione per far funzionare lo script correttamente
+@genres la variabile che prende il nome della cartella che si sta analizzando (Trusted or Acid, or Tested)
+Inserire in input la corrispondente dell'elaborazione per far funzionare lo script correttamente
 '''
-#genres = "Trusted_Splitted"
-genres = "Acid_Splitted"
 
+choiche = 0
+while (choiche < 1 or choiche > 3):
+    print("-- Select Dataset --\n1 - Acid\n2 - Trusted\n3 - Tested")
+    choiche = input("\nChoice: ")
+    try:
+        choiche = int(choiche)
+        if (choiche < 1 or choiche > 3):  # il valore dev'essere 0 o maggiore di 0
+            print("Error:\Select a number from 1 to 3")
+    except ValueError:
+        choiche = 0
+        print("Error:\The input data is not a number")
+
+if (choiche == 1):
+    genres = "Acid_Splitted"
+elif (choiche == 2):
+    genres = "Trusted_Splitted"
+else:
+    genres = "Tested_Splitted"
+print(f"Select {choiche} -> {genres} folder \n")
 i = 1
 trustedOrAcidDirectory = genres
 
 for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDirectory}"):
-    print("Iterata:  ", i)
+    print("Number of file (iter):  ", i)
     i += 1
     # Per ogni file all'interno della path definita sopra audio_folder/trusted ed audio_folder/malware
     if filename_SplittedFolder == ".DS_Store":  # Se il file è .DS_Store continuo a l'iterazione senza eseguire le istruzioni del ciclo
@@ -93,7 +109,7 @@ for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDir
         pathSplittedAudioDirectory = f'{splitted_Folder}\\{trustedOrAcidDirectory}\\{filename_SplittedFolder}'  # path del file audio i-mo
         # Titolo corrisponde al nome della cartella i-ma senza .wav
         audioTitle = filename_SplittedFolder.split(".wav")[0]
-        print("\nLog-> File: ", audioTitle)
+        print("\nExtract from audio : ", audioTitle)
 
         if (trustedOrAcidDirectory == "Acid_Splitted"):
             # songTitle = songname.split("\\")[6].split(".")[0]  # Titolo senza Path ed Estensione del file
@@ -195,8 +211,10 @@ for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDir
         fileArff = open('results\\data.arff', 'a', newline='')
         fileArff.writelines(to_append_arff)
         fileArff.close()
-        #scrivo riga nel file csv
+        # scrivo riga nel file csv
         file = open('results\\data.csv', 'a', newline='')  # apre il file in modalità aggiunta
         writer = csv.writer(file)  # aggiungiamo la riga al file
         writer.writerow([audioTitle + ".wav", to_append, classe])
         file.close()
+
+print(f"\nThe .arff and .csv datasets generated in: Script/results folder")

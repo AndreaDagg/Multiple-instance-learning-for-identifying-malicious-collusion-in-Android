@@ -18,6 +18,7 @@ trusted_audio = os.path.join(audio_folder, "trusted")
 malware_audio = os.path.join(audio_folder, "malware")
 trusted_Acid_Folder = os.path.join(apk_folder, "trusted_Acid")
 trusted_Apk_Folder = os.path.join(audio_folder, "trusted_audio_trusted_apk")
+test_Apk_Folder = os.path.join(apk_folder, "Test_Apk")
 
 '''
 createNewDirectory 
@@ -60,13 +61,17 @@ def getHeaderAttributes():
 
 
 '''
-Funzione che ritorna una lista di tutti gli apk èpresenti delle due directory di file splittati
+Funzione che ritorna una lista di tutti gli apk èpresenti delle tre  directory di file splittati
+
+itera sulle cartelle con gli apk e poi cambia l'estensione perché i file audio potrebbere non essere stati elaborati
 '''
 
 
 def getDatasetWavName():
     name_list = []
     for wav in os.listdir(trusted_Acid_Folder):
+        name_list.append(f'{str(wav.split(".")[0])}{".wav"}{","}')
+    for wav in os.listdir(test_Apk_Folder):
         name_list.append(f'{str(wav.split(".")[0])}{".wav"}{","}')
     for wav in os.listdir(trusted_Apk_Folder):
         name_list.append(f'{str(wav)}{","}')
@@ -81,7 +86,7 @@ def createArff(nameFile, relation, attributes_list, attributes_type, class_list,
     print("Creo il file...")
     fileArff = open("results\\" + nameFile + ".arff", 'w', newline='')
     fileArff.write("@relation " + relation + "\n\n")  # relazione del file
-    fileArff.write("@attribute virus_id{")  # settiamo la lista di attributi bag_id or virus_id
+    fileArff.write("@attribute virus_bag{")  # settiamo la lista di attributi bag_id or virus_id
     for wav in getDatasetWavName():
         fileArff.write(f'{str(wav)}')
     fileArff.write("}\n")
