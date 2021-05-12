@@ -98,6 +98,10 @@ print(f"Select {choiche} -> {genres} folder \n")
 i = 1
 trustedOrAcidDirectory = genres
 
+'''Inserire questo codice per iterare automaticamente su tutte le carette siua trusted che acid
+    genres = "Acid_Splitted Trusted_Splitted".split() '''
+
+#for g in genres:
 for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDirectory}"):
     print("Number of file (iter):  ", i)
     i += 1
@@ -176,16 +180,16 @@ for filename_SplittedFolder in os.listdir(f"{splitted_Folder}\\{trustedOrAcidDir
             else:
                 to_append_arff += f'\\n{np.mean(chroma_stft)}{","}{np.mean(spec_cent)}{","}{np.mean(spec_bw)}{","}{np.mean(rolloff)}{","}{np.mean(zcr)}{","}'
 
-            splittedFeature = 1
+            indexMfcc = 1
             for e in mfcc:
-                if (splittedFeature == len(mfcc)):  # all'ultima features dell'istnza non mi serve inserire la virgola
+                if (indexMfcc == len(mfcc)):  # all'ultima features dell'istnza non mi serve inserire la virgola
                     to_append_arff += f'{np.mean(e)}'  # media dei valori in mfcc
                     to_append += f' {np.mean(e)}'
                 else:
                     to_append_arff += f'{np.mean(e)}{","}'  # media dei valori in mfcc
                     to_append += f' {np.mean(e)}{","}'
                 # media dei valori in mfcc
-                splittedFeature += 1
+                indexMfcc += 1
             # Finisco l'i-mo to_appen e devo inserire \n per differenziare le feature
             if splittedAudio != latestSplitter:
                 to_append += "\\n"
