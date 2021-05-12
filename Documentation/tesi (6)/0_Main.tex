@@ -1,0 +1,139 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PREAMBOLO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% === Impostazione del documento ==========================
+\documentclass[12pt,a4paper,twoside,english,italian,hidelinks]{book}
+
+
+\usepackage{setspace}
+\onehalfspace
+
+% === Regolazione dei margini =============================
+\addtolength{\oddsidemargin}{30pt}
+\addtolength{\evensidemargin}{-30pt}
+\usepackage{fancyhdr}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage[section]{placeins}
+
+% === Impostazione dei font ===============================
+
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel}
+\usepackage{ae}
+\usepackage{relsize}
+\usepackage{csquotes} 
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathdots}
+\usepackage[colorlinks=true]{hyperref}
+\hypersetup{
+	bookmarksnumbered=true,
+	linkcolor=black,
+	citecolor=black,
+	pagecolor=black,
+	urlcolor=black,
+}
+\usepackage{verbatim}
+\usepackage{alltt}
+
+% === Integrazione delle figure ===========================
+\usepackage{graphicx}
+\graphicspath{{./imgs/}}
+\renewcommand{\figurename}{Fig.}
+\usepackage{subfigure}
+\usepackage[section]{placeins}
+\usepackage[nottoc]{tocbibind}
+
+% === Per gli algoritmi ===================================
+\usepackage{algorithmicx}
+\usepackage[ruled]{algorithm}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage{xcolor}
+
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codeorange}{rgb}{0.255,0.112,0.67}
+\definecolor{codepurple}{rgb}{0.58,0,0.8}
+\definecolor{backcolour}{rgb}{0.250,0.250,0.250}
+
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{white},   commentstyle=\color{codegreen},
+  keywordstyle=\color{orange},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\tiny, %or small or footnotestyle
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=3pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=1
+}
+
+%"mystyle" code listing set
+\lstset{style=mystyle}
+
+% === Per le tabelle ======================================
+\usepackage{tabularx}
+
+% === Per la bibliografia multicolonna ====================
+\usepackage{etoolbox}
+%\usepackage[backend=biber, sorting=none]{biblatex} \addbibresource{bibliografia-tesi.bib}
+
+%\patchcmd{\thebibliography}{\list}{\begin{multicols}{2}\smaller\list}{}{}
+%\appto{\endthebibliography}{\end{multicols}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TESTO DELLA TESI
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\frontmatter
+	% === Frontespizio ====================================
+	\pagestyle{empty}
+	\input{1_frontespizio}
+	
+	%%% inseriamo apgina vuota %%%
+	%\clearpage
+    %\null
+    %\thispagestyle{empty}
+    %\clearpage
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\input{2_dedica}
+
+	% === Indice ==========================================
+	\tableofcontents
+	\listoffigures
+	
+
+
+	% === Capitoli Tesi ===================================
+	\pagestyle{plain}
+	\input{3_introduzione}
+	\input{4_capitolo_2}
+	\input{5_capitolo_3}
+	\input{6_capitolo_4}
+	% Inserite qui gli altri capitoli:
+	%\input{miocapitolo1}
+	%\input{miocapitolo2}
+	\input{conclusione}
+	
+
+	% === Bibliografia ====================================
+	\newpage
+	\bibliographystyle{IEEEtran}
+	\bibliography{bibliografia-tesi.bib}
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
