@@ -1,0 +1,46 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mainmatter %inizia la numeraizione da capo
+\chapter{Introduzione}
+\label{chap:Introduzione}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Contesto applicativo}
+\label{sec:intro1}
+Nell'ambito della sicurezza informatica, attraverso il termine malware, abbreviazione di \textit{malicious software}, si vanno ad indicare tutti quei "software malevoli" il cui scopo ultimo è di andare ad interferire con le operazioni svolte da un utente in un dispositivo elettronico. Un malware può agire a diversi livelli, di fatti il termine stesso racchiude diverse categorie di software malevolo: Virus, Ransomware, Trojan, Worm, sono solo alcuni dei possibili tipi di malware. La caratteristica che differenzia un malware da un qualsiasi altro applicativo software risiede nell'intenzionalità dello sviluppatore nel voler realizzare codice malevolo, quindi non rientrano in questo contesto tutti quei software che presentano un bug che mina alla sicurezza dell'applicativo. 
+\\È dunque fondamentale studiare i rischi ed i pericoli che riguardano il mondo dell'informatica e più nello specifico quello del mobile computing\footnote{Con il termine mobile computing, si vanno ad indicare tutti quei dispositivi che non sono vincolati dall'utilizzo in una posizione fissa. Rientrano in questa categoria anche i dispositivi mobile come gli smartphone}. Uno dei sistemi operativi più diffusi per i dispositivi mobile è "Android" che grazie alla sua flessibilità permette all'utente di eseguire particolari azioni liberamente all'interno del proprio ecosistema. Android  ad oggi è leader del mercato degli smartphone, ed è quindi il sistema operativo più utilizzato a livello mondiale con 2,5 miliardi di utenti attivi mensilmente nella prima metà del 2019\cite{venturebeat}. La sua diffusione è stata incentivata anche perché non è collegato con un produttore hardware specifico portando il sistema operativo di Google ad avere solo nel 2015 più di quattromila dispositivi diversi che utilizzassero android\cite{4000}. 
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Motivazioni e obiettivi}
+\label{sec:intro2}
+La possibilità di flessibilità dell'ecosistema Android apre le porte ad una maggior intrusione di codice malevolo all'interno degli applicativi, si pensi che oltre alla possibilità di istallare applicazioni dallo store ufficiale \textit{Google Play} è possibile scaricare ed istallare applicazioni attraverso il reperimento di un qualsiasi file \textit{.apk}\footnote{L'estensione apk - Android Package indica un pacchetto contenete tutti i file relativi ad una applicazione Android.} da un generico sito web. Gran parte dei malware Android si diffonde proprio attraverso l'utilizzo di quest'ultima pratica di fatti, scaricando applicazioni da siti terzi non è garantita una preventiva scansione del download per rilevarne la dannosità come avviene attraverso l'utilizzo dello store ufficiale, più nello specifico attraverso l'utilizzo di \textit{Google Play Protect} attivo di default in \textit{Google Play}.
+\\Da qui la motivazione che ci ha portato allo sviluppo di questa tesi è legata alla classificazione di queste minacce, partendo da file apk, con l'obiettivo di utilizzare tecniche di machine learning, nello specifico multiple instance learning per la classificazione di applicativi colludenti affetti da malware.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Risultati raggiunti}
+\label{sec:intro3}
+Dato un file \textit{Apk} si passa alla conversione del codice binario relativo in un file audio, nello specifico un file \textit{Wav}\footnote{L'estensione wav - Waveform Audio File Format è uno standard di formato di file audio, sviluppato da IBM e Microsoft, per memorizzare un flusso di bit audio. \cite{enwiki:1020662001}}, di seguito si passa ad una suddivisione ricavando quindi da un singolo audio più file audio. Da ognuno si è passati all'estrazione di alcune delle caratteristiche che lo compongono. Creando un dataset ad hoc, abbiamo addestrato modelli di multiple instance learning per la classificazione di applicazioni sicure o applicazioni colludenti affette da malware. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Organizzazione della tesi}
+\label{sec:intro4}
+La tesi è sviluppata progressivamente nei seguenti capitoli, ai quali va ad aggiungersi il capitolo corrente relativo all'introduzione:
+
+
+\begin{itemize}
+    \item\hyperref[chap:cap2]{\textbf{Capitolo 2}} Android \textbf{TODO: INTEGRARE}
+    \item\hyperref[chap:cap3]{\textbf{Capitolo 3}} Sicurezza in ambiente Android \textbf{TODO: INTEGRARE}
+    \item\hyperref[chap:cap4]{\textbf{Capitolo 4}} Metodologie \textbf{TODO: INTEGRARE}
+    \item\hyperref[chap:sperim]{\textbf{Capitolo 5}} Sperimentazioni\textbf{TODO: INTEGRARE}
+    \item\hyperref[chap:Conclusioni]{\textbf{Capitolo 6}} Conclusione\textbf{TODO: INTEGRARE}
+\end{itemize}
+
